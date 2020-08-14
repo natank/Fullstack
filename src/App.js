@@ -14,9 +14,7 @@ class App extends Component {
     return <div className="App">
       <h1>Hello World</h1>
       <Child />
-      <PersonalData FullName="Nati" Address="Haifa" />
-      <PersonalData FullName="David" Address="Tel Aviv" />
-      <PersonComp />
+
       <AddTotal />
     </div >
   }

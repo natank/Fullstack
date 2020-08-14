@@ -3,11 +3,12 @@ import React, { Component } from 'react'
 class AddTotal extends Component {
   constructor() {
     super()
-    this.state = { num: null, total: 0 }
+    this.state = { num: '', total: 0 }
   }
 
 
   addTotal = (e) => {
+    e.preventDefault()
     let { num, total } = this.state;
     this.setState({ num: '', total: num + total })
   }
