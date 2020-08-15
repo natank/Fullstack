@@ -1,0 +1,17 @@
+.user {
+  &__form {
+    border: 1px solid green;
+    margin-bottom: 1rem;
+    padding: 1rem;
+    &:hover{
+      box-shadow: 10px 10px 5px -9px rgba(0,0,0,0.75);
+    }
+    &:active {
+      box-shadow: 0 0px #666;
+      transform: translateY(4px);
+    }
+    &--selected {
+      border: 1px solid red;
+    }
+  }
+}
