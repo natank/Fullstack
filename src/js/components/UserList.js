@@ -3,26 +3,46 @@ import User from './User'
 import userList from '../../styles/userList.scss'
 
 class UserList extends Component {
+  
   constructor(props) {
     super(props)
     this.userList = props.userList;
+    this.onSearchTermChange = this.onSearchTermChange.bind(this)
     this.state = {
-      selectedUserID: null
+      searchTerm: ''
     }
   }
 
+  onSearchTermChange(event){
+    let searchTerm = event.target.value.toString();
+    this.setState({searchTerm})
+  }
+
+  filterUsersBySearchTerm = function(){
+    return this.userList.filter(user=>{
+      if(this.state.searchTerm.length < 1) return true;
+      if(user.name.toLowerCase().includes(this.state.searchTerm.toLowerCase())) return true;
+      if(user.email.toLowerCase().includes(this.state.searchTerm.toLowerCase())) return true;
+      return false;
+        
+      
+    })
+  }
 
   renderList() {
-    return this.userList.data.map((user => {
-      let selected = this.state.selectedUserID === user.id;
+    let list;
+    
+    list = this.filterUsersBySearchTerm()
+    
+    return list.map((user => {
       return pug`
-        User(key= user.id user=user selected= ${selected} handleClick=this.handleUserClick.bind(this))
+        User(key= user.id user=user hasTasks= ${user.hasTasks} handleClick=${this.handleUserClick.bind(this)})
       `
     }).bind(this))
   }
 
   handleUserClick(userId) {
-    this.setState({ selectedUserID: userId })
+    return
   }
 
   render() {
@@ -31,9 +51,9 @@ class UserList extends Component {
     form.ui.form.userList__search 
     .field.inline
     label Name :  
-    input(type="text" placeholder="type here")
+    input(type="text" placeholder="type here" onChange = ${this.onSearchTermChange})
     button.ui.button 
-    | Add
+      | Add
     .ui.relaxed.divided.list ${ this.renderList()}
     `
   }
