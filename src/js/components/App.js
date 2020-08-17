@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import UserList from './UserList';
-
-
+import SelectedUser from './SelectedUser';
+import '../../styles/Components/app.scss'
 
 class App extends Component {
   constructor(props) {
@@ -61,8 +61,9 @@ class App extends Component {
 
     return (
       pug`
-        .div.ui.container
+        .div.ui.container.app
           UserList(userList= ${users}, usersTasks= ${usersTask}, updateUser=${this.updateUser})
+          SelectedUser
       `
     )
   }

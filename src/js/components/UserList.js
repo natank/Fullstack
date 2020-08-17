@@ -51,13 +51,14 @@ class UserList extends Component {
 
   render() {
     return pug`
-    form.ui.form.userList__search 
-    .field.inline
-    label Search :  
-    input(type="text" placeholder="type here" onChange = ${this.onSearchTermChange})
-    button.ui.button 
-      | Add
-    .ui.relaxed.divided.list ${ this.renderList()}
+      .userList
+        form.ui.form.userList__search 
+          .field.inline
+            label Search :  
+            input(type="text" placeholder="type here" onChange = ${this.onSearchTermChange})
+          button.ui.button 
+            | Add
+        .ui.relaxed.divided.list ${ this.renderList()}
     `
   }
 }
