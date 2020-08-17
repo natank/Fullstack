@@ -1,17 +1,24 @@
 import React, { Component } from "react";
 import UserList from './UserList';
 
-const jsonPlaceholderDB = JSON.parse(localStorage.getItem('jsonPlaceholderDB'));
-
-let { users, posts, todos } = jsonPlaceholderDB;
-users = users.data;
-posts = posts.data;
-todos = todos.data;
-
-const App = () => {
 
 
-  const determineUsersTasks = function () {
+class App extends Component {
+  constructor(props) {
+    super(props);
+    let jsonPlaceholderDB = this.initDb();
+    this.state = {
+      jsonPlaceholderDB: jsonPlaceholderDB
+    }
+  }
+
+  initDb = () => {
+    const jsonPlaceholderDB = JSON.parse(localStorage.getItem('jsonPlaceholderDB'));
+    return jsonPlaceholderDB;
+  }
+  determineUsersTasks = function () {
+    const users = this.state.jsonPlaceholderDB.users.data;
+    const todos = this.state.jsonPlaceholderDB.todos.data;
     const usersTasks = users.map(user => {
       let hasTasks = { user: user.id, hasTasks: false };
       for (let i = 0; i < todos.length; i++) {
@@ -25,27 +32,40 @@ const App = () => {
     return usersTasks
   }
 
-  const updateUser = userDetails => {
-    for (let i = 0; i < jsonPlaceholderDB.users.length; i++) {
-      if (jsonPlaceholderDB.users[i].id === user.id) {
-        usersDetails.keys.forEach(key => {
-          jsonPlaceholderDB.users[i][key] = userDetails[key]
+  updateUser = userDetails => {
+    let { name, email, street, city, zipcode } = userDetails;
+    let address = { street, city, zipcode }
+    let userDetailsFormatted = { name, email, address };
+
+    const users = this.state.jsonPlaceholderDB.users.data;
+    for (let i = 0; i < users.length; i++) {
+      if (users[i].id === userDetails.id) {
+        Object.keys(userDetailsFormatted).forEach(key => {
+          users[i][key] = userDetailsFormatted[key]
         })
         break;
       }
     }
-    localStorage.setItem('jsonPlaceholderDB', JSON.stringify(jsonPlaceholderDB))
-
+    this.updateDb(this.state.jsonPlaceholderDB)
   }
 
-  let usersTask = determineUsersTasks();
+  updateDb(newDb) {
+    localStorage.setItem('jsonPlaceholderDB', JSON.stringify(newDb));
+    let jsonPlaceholderDB = JSON.parse(localStorage.getItem('jsonPlaceholderDB'))
+    this.setState({ jsonPlaceholderDB })
+  }
 
-  return (
-    pug`
-      .div.ui.container
-        UserList(userList= ${users}, usersTasks= ${usersTask}, updateUser=${updateUser})
-    `
-  )
+  render() {
+    const users = this.state.jsonPlaceholderDB.users.data;
+    let usersTask = this.determineUsersTasks();
+
+    return (
+      pug`
+        .div.ui.container
+          UserList(userList= ${users}, usersTasks= ${usersTask}, updateUser=${this.updateUser})
+      `
+    )
+  }
 
 }
 

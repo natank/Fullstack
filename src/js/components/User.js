@@ -3,32 +3,20 @@ import '../../styles/user.scss';
 class User extends Component {
   constructor(props) {
     super(props)
-    let { id, name, email, address } = props.user;
+    let { name, email, address } = props.user;
+    let { street, city, zipcode } = address;
     this.state = {
       isShowOtherData: false,
       isOtherBtnHover: false,
       name,
       email,
-      address
+      street,
+      city,
+      zipcode
     }
-    console.log(this.state)
   }
 
-  renderOtherData = function () {
-    if (this.state.isShowOtherData) return pug`
-    .field.inline
-      label Street:
-      input(type="text" value=this.state.address.street)
-    .field.inline
-      label City:
-      input(type="text" value=this.state.address.city)
-    .field.inline
-      label Zip Code:
-      input(type="text" value=this.state.address.zipcode)
-    `
-    else return null
 
-  }
 
   onOtherBtnEnter = event => {
     if (!this.state.isOtherBtnHover) {
@@ -44,9 +32,32 @@ class User extends Component {
     this.setState({ isShowOtherData: false, isOtherBtnHover: true })
   }
 
-  onNameChange = event => {
-    let name = event.target.value;
-    this.setState({ name })
+  handleUserDataChange = (event, key) => {
+    let { value } = event.target;
+    let newState = {};
+    newState[key] = value
+    this.setState(newState)
+  }
+
+  renderOtherData = function () {
+    if (this.state.isShowOtherData) return pug`
+    .field.inline
+      label Street:
+      input(type="text" 
+        value=this.state.street
+        onChange = event => this.handleUserDataChange(event, 'street'))
+    .field.inline
+      label City:
+      input(type="text" 
+        value=this.state.city
+        onChange = event => this.handleUserDataChange(event, 'city'))
+    .field.inline
+      label Zip Code:
+      input(type="text" value=this.state.zipcode
+        onChange = event => this.handleUserDataChange(event, 'zipcode'))
+    `
+    else return null
+
   }
 
   render() {
@@ -55,24 +66,35 @@ class User extends Component {
     return pug`
       form.ui.form(key = user.id className = ${ hasTasksClass} onClick = event => handleClick(user.id)).user__form
         div ID: ${ this.state.id}
+        
         .field.inline
           label Name :
-          input(type = "text" value = this.state.name onChange=${this.onNameChange})
+          input(type = "text" 
+            value = this.state.name 
+            onChange=(event)=> this.handleUserDataChange(event, 'name'))
+
         .field.inline
           label Email :
-          input(type = "text" value = this.state.email)
+          input(type = "text" 
+            value = this.state.email
+            onChange = event => this.handleUserDataChange(event, 'email'))
         button.ui.button(
           onMouseEnter = this.onOtherBtnEnter 
           onMouseLeave = this.onOtherBtnLeave
           onClick = this.onOtherBtnClick)
           | Other Data
         ${ this.renderOtherData()}
-        button.ui.button(onClick = props.update({
-          id: props.user.id, 
-          name: this.state.name,
-          email: this.state.email,
-          address: this.state.address
-        }))
+        button.ui.button(onClick = ()=>{
+            let {name, email, street, city, zipcode} = this.state;
+            this.props.update({
+            id: this.props.user.id, 
+            name,
+            email,
+            street,
+            city,
+            zipcode
+          })
+        })   
           | Update
         button.ui.button
           | Delete
