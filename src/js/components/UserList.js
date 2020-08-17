@@ -3,7 +3,7 @@ import User from './User'
 import userList from '../../styles/userList.scss'
 
 class UserList extends Component {
-  
+
   constructor(props) {
     super(props)
     this.userList = props.userList;
@@ -13,30 +13,34 @@ class UserList extends Component {
     }
   }
 
-  onSearchTermChange(event){
+  onSearchTermChange(event) {
     let searchTerm = event.target.value.toString();
-    this.setState({searchTerm})
+    this.setState({ searchTerm })
   }
 
-  filterUsersBySearchTerm = function(){
-    return this.userList.filter(user=>{
-      if(this.state.searchTerm.length < 1) return true;
-      if(user.name.toLowerCase().includes(this.state.searchTerm.toLowerCase())) return true;
-      if(user.email.toLowerCase().includes(this.state.searchTerm.toLowerCase())) return true;
+  filterUsersBySearchTerm = function () {
+    return this.userList.filter(user => {
+      if (this.state.searchTerm.length < 1) return true;
+      if (user.name.toLowerCase().includes(this.state.searchTerm.toLowerCase())) return true;
+      if (user.email.toLowerCase().includes(this.state.searchTerm.toLowerCase())) return true;
       return false;
-        
-      
+
+
     })
   }
 
   renderList() {
     let list;
-    
+
     list = this.filterUsersBySearchTerm()
-    
+
     return list.map((user => {
       return pug`
-        User(key= user.id user=user hasTasks= ${user.hasTasks} handleClick=${this.handleUserClick.bind(this)})
+        User(key= user.id 
+          user=user 
+          hasTasks= ${user.hasTasks} 
+          handleClick=${this.handleUserClick.bind(this)}
+          update = props.updateUser)
       `
     }).bind(this))
   }
@@ -46,11 +50,10 @@ class UserList extends Component {
   }
 
   render() {
-
     return pug`
     form.ui.form.userList__search 
     .field.inline
-    label Name :  
+    label Search :  
     input(type="text" placeholder="type here" onChange = ${this.onSearchTermChange})
     button.ui.button 
       | Add
