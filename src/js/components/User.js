@@ -65,7 +65,9 @@ class User extends Component {
     let hasTasksClass = hasTasks ? 'user__form--has-tasks' : 'user__form--no-tasks';
     return pug`
       form.ui.form(key = user.id className = ${ hasTasksClass} onClick = event => handleClick(user.id)).user__form
-        div ID: ${ this.props.user.id}
+        div(onClick=${(e)=>{
+          this.props.selectUser(user.id)}
+        }) ID: ${ this.props.user.id}
         
         .field.inline
           label Name :

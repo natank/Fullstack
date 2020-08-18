@@ -40,7 +40,8 @@ class UserList extends Component {
           user=user 
           hasTasks= ${user.hasTasks} 
           handleClick=${this.handleUserClick.bind(this)}
-          update = this.props.updateUser)
+          update = ${this.props.updateUser}
+          selectUser = ${this.props.selectUser})
       `
     }).bind(this))
   }
