@@ -32,6 +32,14 @@ class SelectedUser extends Component {
     return todosMarkup;
   }
 
+  RenderPosts(){
+    this.posts.map(post=>{
+      return pug`
+        .selectedUser__data-item(key=${this.post.id})
+      `
+    })
+  }
+
   render() { 
     return pug`
       .selectedUser
@@ -46,6 +54,8 @@ class SelectedUser extends Component {
             span.selectedUser__title Posts - User ${this.props.userId}  
             button.btn--small Add
           .selectedUser__list
+            ${this.RenderPosts()}
+
             .selectedUser__list-item
               .selectedUser__data-item
                 | Title: Some Title
