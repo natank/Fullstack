@@ -14,5 +14,19 @@
         border: 1px solid black;
         margin-bottom: 1rem;
         padding: 1rem;
+        display: grid;
+        grid-template-columns: 1;
+        grid-gap: .5rem;
     }
+    &__data-item{
+       span{
+           display: inline-block;
+           &.first {
+            margin-right: 1rem;
+        }
+       }
+       
+    }
+
+    
 }
