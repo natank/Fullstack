@@ -21,6 +21,10 @@ const createLocalDb = async () => {
     } catch (err) {
       console.log(err)
     }
+    jsonPlaceholderDB.posts = jsonPlaceholderDB.posts.data;
+    jsonPlaceholderDB.users = jsonPlaceholderDB.users.data;
+    jsonPlaceholderDB.todos = jsonPlaceholderDB.todos.data;
+
     let data = JSON.stringify(jsonPlaceholderDB);
     localStorage.setItem('jsonPlaceholderDB', data)
   }

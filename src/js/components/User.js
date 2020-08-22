@@ -1,10 +1,14 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
+import AppContext from '../Context/AppContext';
 import '../../styles/user.scss';
 class User extends Component {
+  static contextType = AppContext
   constructor(props) {
     super(props)
     let { name, email, address } = props.user;
     let { street, city, zipcode } = address;
+    this.showOtherDataTimer = undefined;
+
     this.state = {
       isShowOtherData: false,
       isOtherBtnHover: false,
@@ -18,13 +22,25 @@ class User extends Component {
 
 
 
+
   onOtherBtnEnter = event => {
     if (!this.state.isOtherBtnHover) {
-      this.setState({ isShowOtherData: true, isOtherBtnHover: true })
+      /**
+         * Setup a timer to Prevent rendering of the other data section
+         * in case of accidential hover.
+         */
+      this.showOtherDataTimer = setTimeout(() => {
+        this.showOtherDataTimer = undefined;
+
+        this.setState({ isShowOtherData: true, isOtherBtnHover: true })
+      }, 500)
     }
   }
 
-  onOtherBtnLeave = event => this.setState({ isOtherBtnHover: false })
+  onOtherBtnLeave = event => {
+    this.setState({ isOtherBtnHover: false })
+    clearTimeout(this.showOtherDataTimer)
+  }
 
 
   onOtherBtnClick = event => {
@@ -41,33 +57,37 @@ class User extends Component {
 
   renderOtherData = function () {
     if (this.state.isShowOtherData) return pug`
-    .field.inline
-      label Street:
-      input(type="text" 
-        value=this.state.street
-        onChange = event => this.handleUserDataChange(event, 'street'))
-    .field.inline
-      label City:
-      input(type="text" 
-        value=this.state.city
-        onChange = event => this.handleUserDataChange(event, 'city'))
-    .field.inline
-      label Zip Code:
-      input(type="text" value=this.state.zipcode
-        onChange = event => this.handleUserDataChange(event, 'zipcode'))
+    section.user__other-data
+      .field.inline
+        label Street:
+        input(type="text" 
+          value=this.state.street
+          onChange = event => this.handleUserDataChange(event, 'street'))
+      .field.inline
+        label City:
+        input(type="text" 
+          value=this.state.city
+          onChange = event => this.handleUserDataChange(event, 'city'))
+      .field.inline
+        label Zip Code:
+        input(type="text" value=this.state.zipcode
+          onChange = event => this.handleUserDataChange(event, 'zipcode'))
     `
     else return null
 
   }
 
   render() {
-    let { user, hasTasks, handleClick } = this.props;
-    let hasTasksClass = hasTasks ? 'user__form--has-tasks' : 'user__form--no-tasks';
+    let { user, handleClick } = this.props;
+    let hasTodos = user.hasTodos;
+    let hasTodosClass = hasTodos ? 'user__form--has-todos' : 'user__form--no-todos';
+    let selectedUserClass = this.context.selectedUser === user.id ? 'user__form--selected' : 'user__form--not-selected';
     return pug`
-      form.ui.form(key = user.id className = ${ hasTasksClass} onClick = event => handleClick(user.id)).user__form
-        div(onClick=${(e)=>{
-          this.props.selectUser(user.id)}
-        }) ID: ${ this.props.user.id}
+      form.ui.form(key = user.id className = ${ `${hasTodosClass} ${selectedUserClass}`} onClick = event => handleClick(user.id)).user__form
+        div(onClick=${(e) => {
+        this.context.selectUser(user.id)
+      }
+      }) ID: ${this.props.user.id}
         
         .field.inline
           label Name :
@@ -85,10 +105,12 @@ class User extends Component {
           onMouseLeave = this.onOtherBtnLeave
           onClick = this.onOtherBtnClick)
           | Other Data
+
         ${ this.renderOtherData()}
+
         button.ui.button(onClick = ()=>{
             let {name, email, street, city, zipcode} = this.state;
-            this.props.update({
+            this.context.updateUser({
             id: this.props.user.id, 
             name,
             email,

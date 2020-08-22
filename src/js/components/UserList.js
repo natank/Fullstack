@@ -38,10 +38,8 @@ class UserList extends Component {
       return pug`
         User(key= user.id 
           user=user 
-          hasTasks= ${user.hasTasks} 
-          handleClick=${this.handleUserClick.bind(this)}
-          update = ${this.props.updateUser}
-          selectUser = ${this.props.selectUser})
+          hasTodos= ${user.hasTodos} 
+          handleClick=${this.handleUserClick.bind(this)})
       `
     }).bind(this))
   }

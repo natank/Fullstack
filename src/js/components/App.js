@@ -1,6 +1,8 @@
 import React, { Component } from "react";
+import { AppProvider } from '../Context/AppContext'
 import UserList from './UserList';
 import SelectedUser from './SelectedUser';
+
 import '../../styles/Components/app.scss'
 
 class App extends Component {
@@ -9,28 +11,57 @@ class App extends Component {
     let jsonPlaceholderDB = this.initDb();
     this.state = {
       jsonPlaceholderDB: jsonPlaceholderDB,
-      selectedUser: null
+      selectedUser: 8
     }
   }
 
   selectUser = id => {
-    
-    this.setState({selectedUser: id})
+
+    this.setState({ selectedUser: id })
   }
 
   completeTodo = id => {
-    let todos = this.state.jsonPlaceholderDB.todos.data;
-    for(let i=0; i<todos.length; i++){
-      if(todos[i].id === id){
-        todos[i].completed=true;
+    let { todos } = this.state.jsonPlaceholderDB;
+    for (let i = 0; i < todos.length; i++) {
+      if (todos[i].id === id) {
+        todos[i].completed = true;
         break;
       }
     }
     this.updateDb(this.state.jsonPlaceholderDB)
   }
 
+  getNewTodoId() {
+    let { todos } = this.state.jsonPlaceholderDB;
+    let newId = todos.length;
+    while (todos[newId !== undefined]) newId++
+    return newId + 1;
+  }
+
+  createTodo = title => {
+    // create a new todo and add it to the todo list
+    // Todo object should include the following properties:
+    // userId, id, title, completed
+    let { todos } = this.state.jsonPlaceholderDB;
+    let newTodoId = this.getNewTodoId();
+    let newTodo = {
+      userId: this.state.selectedUser,
+      title,
+      id: newTodoId,
+      completed: false
+    }
+    todos.push(newTodo);
+    this.updateDb(this.state.jsonPlaceholderDB);
+  }
+
   initDb = () => {
-    const jsonPlaceholderDB = JSON.parse(localStorage.getItem('jsonPlaceholderDB'));
+    let jsonPlaceholderDB = JSON.parse(localStorage.getItem('jsonPlaceholderDB'));
+    let { posts, users, todos } = jsonPlaceholderDB;
+    jsonPlaceholderDB = {
+      posts,
+      users,
+      todos
+    }
     return jsonPlaceholderDB;
   }
 
@@ -41,19 +72,17 @@ class App extends Component {
   }
 
   determineUsersTodos = function () {
-    const users = this.state.jsonPlaceholderDB.users.data;
-    const todos = this.state.jsonPlaceholderDB.todos.data;
-    const usersTodos = users.map(user => {
-      let hasTodos = { user: user.id, hasTasks: false };
+    const { users, todos } = this.state.jsonPlaceholderDB
+
+    users.forEach(user => {
+      user.hasTodos = false;
       for (let i = 0; i < todos.length; i++) {
-        if (todos[i].userId === user.id) {
+        if (todos[i].userId === user.id && todos[i].completed === false) {
           user.hasTodos = true;
           break;
         }
       }
-      return hasTodos;
     })
-    return usersTodos
   }
 
   updateUser = userDetails => {
@@ -61,7 +90,8 @@ class App extends Component {
     let address = { street, city, zipcode }
     let userDetailsFormatted = { name, email, address };
 
-    const users = this.state.jsonPlaceholderDB.users.data;
+    const { users } = this.state.jsonPlaceholderDB;
+
     for (let i = 0; i < users.length; i++) {
       if (users[i].id === userDetails.id) {
         Object.keys(userDetailsFormatted).forEach(key => {
@@ -73,12 +103,14 @@ class App extends Component {
     this.updateDb(this.state.jsonPlaceholderDB)
   }
 
-  
 
-  renderSelectedUser(){
-    if(this.state.selectedUser) {
-      const todos = this.state.jsonPlaceholderDB.todos.data;
-      const posts = this.state.jsonPlaceholderDB.posts.data;
+
+  renderSelectedUser() {
+    if (this.state.selectedUser) {
+      let { todos, posts } = this.state.jsonPlaceholderDB;
+
+      todos = todos.filter(todo => todo.userId === this.state.selectedUser)
+      posts = posts.filter(post => post.userId === this.state.selectedUser)
       return pug`
         SelectedUser(todos = ${todos}, posts=${posts}, userId=${this.state.selectedUser}, completeTodo= ${this.completeTodo})
       `
@@ -88,17 +120,23 @@ class App extends Component {
 
   render() {
 
-    if(!this.state.jsonPlaceholderDB) return;
-    const users = this.state.jsonPlaceholderDB.users.data;
+    if (!this.state.jsonPlaceholderDB) return;
+    const { users } = this.state.jsonPlaceholderDB;
 
-    let usersTask = this.determineUsersTodos();
+    this.determineUsersTodos();
 
     return (
       pug`
-        .div.ui.container.app
-          UserList(userList= ${users}, usersTasks= ${usersTask}, updateUser=${this.updateUser}, selectUser=${this.selectUser})
-          ${this.renderSelectedUser()}
-            
+        AppProvider(value={
+          selectedUser: this.state.selectedUser,
+          updateUser: this.updateUser,
+          selectUser:this.selectUser,
+          createTodo: this.createTodo,
+          completeTodo: this.completeTodo
+        })
+          .div.ui.container.app
+            UserList(userList= ${users})
+            ${this.renderSelectedUser()}
       `
     )
   }

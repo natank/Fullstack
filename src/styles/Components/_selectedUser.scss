@@ -1,14 +1,19 @@
 .selectedUser {
+    & > * {
+        margin-bottom: 1rem;
+    }
     &__media-item {
         border: 1px solid #000;
         padding: 1rem
     }
     &__header {
-        margin-bottom: 1rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
     &__title {
-        display: inline-block;
-        margin-right: 3rem;
+        display: flex;
+        justify-content: space-between;
     }
     &__list-item {
         border: 1px solid black;
@@ -19,14 +24,11 @@
         grid-gap: .5rem;
     }
     &__data-item{
-       span{
-           display: inline-block;
-           &.first {
-            margin-right: 1rem;
-        }
+        display: grid;
+        gap: 1rem;
+        grid-template: auto/1fr 5fr
        }
        
     }
 
     
-}
