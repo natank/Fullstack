@@ -30,8 +30,6 @@ const createLocalDb = async () => {
   }
 }
 
-createLocalDb();
-
 ReactDOM.render(pug`
   App
 `, document.querySelector('#root'))

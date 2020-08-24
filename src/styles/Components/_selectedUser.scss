@@ -1,3 +1,4 @@
+@import '../abstracts/abstracts';
 .selectedUser {
     & > * {
         margin-bottom: 1rem;
@@ -28,7 +29,12 @@
         gap: 1rem;
         grid-template: auto/1fr 5fr
        }
-       
+    &__no-todos {
+        text-align: center;
+        color: $color-danger;
+        font-size: 1.3rem;
     }
+       
+}
 
     

@@ -28,9 +28,12 @@ class PostList extends Component {
         this.props.setPostFlag({ isOpen: true })
       }})
         | Add
-    .selectedUser__media-item 
-      .selectedUser__list
-        ${this.renderList()}
+    if(this.props.posts.length)
+      .selectedUser__media-item 
+        .selectedUser__list
+          ${this.renderList()}
+    else
+      p.selectedUser__no-todos This user has no Posts yet
     `
   }
 

@@ -108,7 +108,8 @@ class User extends Component {
 
         ${ this.renderOtherData()}
 
-        button.ui.button(onClick = ()=>{
+        button.ui.button(onClick = event =>{
+            event.preventDefault();
             let {name, email, street, city, zipcode} = this.state;
             this.context.updateUser({
             id: this.props.user.id, 
@@ -120,7 +121,14 @@ class User extends Component {
           })
         })   
           | Update
-        button.ui.button
+        button.ui.button(onClick = event => {
+          event.preventDefault();
+          if(confirm("Delete user ?"))
+          {
+            this.context.deleteUser({userId: this.props.user.id})
+          }
+          else return
+        })
           | Delete
       `
 

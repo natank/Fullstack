@@ -4,6 +4,7 @@ import TodoForm from './TodoForm';
 import PostForm from './PostForm';
 import TodoList from './TodoList';
 import PostList from './PostList';
+import Welcome from './Welcome';
 
 class SelectedUser extends Component {
   constructor(props) {
@@ -26,28 +27,31 @@ class SelectedUser extends Component {
     let { todoForm, postForm } = this.state;
     return pug`
     .selectedUser
-      if (todoForm) 
-        ${TodoForm}(
-          userId = ${ this.props.userId},
-          setTodoFlag = ${ this.setTodoFlag}
-        )
+      if !this.props.userId
+        Welcome
       else
-        ${TodoList}(
-          todos = ${ this.props.todos} 
-          setTodoFlag = ${ this.setTodoFlag} userId = ${this.props.userId}
-        )
-      if(postForm)
-        ${PostForm}(
-          postForm = ${ this.state.postForm},
-          userId = ${ this.props.userId}
-                setPostFlag = ${ this.setPostFlag}
-        )
-      else 
-        ${PostList}(
-          posts = ${ this.props.posts} 
-                userId = ${ this.props.userId} 
-                setPostFlag = ${ this.setPostFlag}
-        )
+        if todoForm
+          ${TodoForm}(
+            userId = ${ this.props.userId},
+            setTodoFlag = ${ this.setTodoFlag}
+          )
+        else
+          ${TodoList}(
+            todos = ${ this.props.todos} 
+            setTodoFlag = ${ this.setTodoFlag} userId = ${this.props.userId}
+          )
+        if postForm
+          ${PostForm}(
+            postForm = ${ this.state.postForm},
+            userId = ${ this.props.userId}
+                  setPostFlag = ${ this.setPostFlag}
+          )
+        else 
+          ${PostList}(
+            posts = ${ this.props.posts} 
+                  userId = ${ this.props.userId} 
+                  setPostFlag = ${ this.setPostFlag}
+          )
   `
   }
 }

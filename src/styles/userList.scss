@@ -1,7 +1,9 @@
 .userList {
   &__search {
+    > * {
+      display: block;
+    }
     display:flex;
-    align-items: center;
+    align-items: top;
   }
-  
 }

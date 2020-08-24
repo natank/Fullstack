@@ -7,9 +7,6 @@ class TodoList extends Component {
     super(props);
   }
 
-
-
-
   renderTodosList() {
     let todosMarkup = this.props.todos.map(todo => {
       let markCompletedBtn = null;
@@ -44,9 +41,12 @@ class TodoList extends Component {
           this.props.setTodoFlag({isOpen: true})
         }) 
           | Add
-      .selectedUser__media-item
-        .selectedUser__list
-          ${this.renderTodosList()}
+      if(this.props.todos.length) 
+        .selectedUser__media-item
+          .selectedUser__list
+            ${this.renderTodosList()}
+      else  
+        p.selectedUser__no-todos This user has no Todos yet
     `
   }
 

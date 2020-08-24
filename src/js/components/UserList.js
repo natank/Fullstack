@@ -6,7 +6,6 @@ class UserList extends Component {
 
   constructor(props) {
     super(props)
-    this.userList = props.userList;
     this.onSearchTermChange = this.onSearchTermChange.bind(this)
     this.state = {
       searchTerm: ''
@@ -19,10 +18,12 @@ class UserList extends Component {
   }
 
   filterUsersBySearchTerm = function () {
-    return this.userList.filter(user => {
-      if (this.state.searchTerm.length < 1) return true;
-      if (user.name.toLowerCase().includes(this.state.searchTerm.toLowerCase())) return true;
-      if (user.email.toLowerCase().includes(this.state.searchTerm.toLowerCase())) return true;
+    return this.props.userList.filter(user => {
+      if (user) {
+        if (this.state.searchTerm.length < 1) return true;
+        if (user.name && user.name.toLowerCase().includes(this.state.searchTerm.toLowerCase())) return true;
+        if (user.email && user.email.toLowerCase().includes(this.state.searchTerm.toLowerCase())) return true;
+      }
       return false;
 
 
@@ -55,8 +56,12 @@ class UserList extends Component {
           .field.inline
             label Search :  
             input(type="text" placeholder="type here" onChange = ${this.onSearchTermChange})
-          button.ui.button(onClick=)
-            | Add
+          .field.userList__add
+            button.ui.button(onClick=event=>{
+            event.preventDefault()
+            this.props.setUserFlag({isOpen: true})
+          })
+              | Add
         .ui.relaxed.divided.list ${ this.renderList()}
     `
   }
