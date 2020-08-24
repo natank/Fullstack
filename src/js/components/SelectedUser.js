@@ -14,19 +14,41 @@ class SelectedUser extends Component {
     }
   }
 
-  setTodoFlag = isOpen => {
-    this.setState({ todoForm: isOpen })
+  setTodoFlag = settings => {
+    this.setState({ todoForm: settings.isOpen })
+  }
+
+  setPostFlag = settings => {
+    this.setState({ postForm: settings.isOpen })
   }
 
   render() {
+    let { todoForm, postForm } = this.state;
     return pug`
     .selectedUser
-        TodoForm(todoForm=this.state.todoForm userId=${this.props.userId})
-        TodoList(todos= ${this.props.todos} todoForm=this.state.todoForm setTodoFlag = this.setTodoFlag userId=${this.props.userId})
-        PostForm(postForm= this.state.postForm)
-        PostList(posts= ${this.props.posts} userId = ${this.props.userId})
-    `
-
+      if (todoForm) 
+        ${TodoForm}(
+          userId = ${ this.props.userId},
+          setTodoFlag = ${ this.setTodoFlag}
+        )
+      else
+        ${TodoList}(
+          todos = ${ this.props.todos} 
+          setTodoFlag = ${ this.setTodoFlag} userId = ${this.props.userId}
+        )
+      if(postForm)
+        ${PostForm}(
+          postForm = ${ this.state.postForm},
+          userId = ${ this.props.userId}
+                setPostFlag = ${ this.setPostFlag}
+        )
+      else 
+        ${PostList}(
+          posts = ${ this.props.posts} 
+                userId = ${ this.props.userId} 
+                setPostFlag = ${ this.setPostFlag}
+        )
+  `
   }
 }
 

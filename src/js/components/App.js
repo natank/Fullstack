@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { AppProvider } from '../Context/AppContext'
 import UserList from './UserList';
 import SelectedUser from './SelectedUser';
-
+import UserForm from './UserForm';
 import '../../styles/Components/app.scss'
 
 class App extends Component {
@@ -11,12 +11,14 @@ class App extends Component {
     let jsonPlaceholderDB = this.initDb();
     this.state = {
       jsonPlaceholderDB: jsonPlaceholderDB,
-      selectedUser: 8
+      selectedUser: 8,
+      userFlag: false
     }
   }
 
-  selectUser = id => {
+  setUserFlag = settings => this.setState({ userFlag: settings.isOpen });
 
+  selectUser = id => {
     this.setState({ selectedUser: id })
   }
 
@@ -31,28 +33,64 @@ class App extends Component {
     this.updateDb(this.state.jsonPlaceholderDB)
   }
 
-  getNewTodoId() {
-    let { todos } = this.state.jsonPlaceholderDB;
-    let newId = todos.length;
-    while (todos[newId !== undefined]) newId++
+
+  getNewId(settings) {
+
+    let { users, todos, posts } = this.state.jsonPlaceholderDB;
+    let contentArray;
+    if (settings.contentObj === 'todo') contentArray = todos;
+    else if (settings.contentObj === 'post') contentArray = posts;
+    else if (settings.contentObj === 'user') contentArray = users;
+    else throw ("unknown content array name")
+    let newId = contentArray.length;
+    while (contentArray[newId !== undefined]) newId++
     return newId + 1;
   }
 
-  createTodo = title => {
+
+  createTodo = todo => {
     // create a new todo and add it to the todo list
     // Todo object should include the following properties:
     // userId, id, title, completed
     let { todos } = this.state.jsonPlaceholderDB;
-    let newTodoId = this.getNewTodoId();
+    let newTodoId = this.getNewId({ contentObj: "todo" });
     let newTodo = {
       userId: this.state.selectedUser,
-      title,
+      title: todo.title,
       id: newTodoId,
       completed: false
     }
     todos.push(newTodo);
     this.updateDb(this.state.jsonPlaceholderDB);
   }
+
+  createPost = post => {
+    let { posts } = this.state.jsonPlaceholderDB;
+    let newPostId = this.getNewId({ contentObj: 'post' });
+    let newPost = {
+      userId: this.state.selectedUser,
+      title: post.title,
+      body: post.body,
+      id: newPostId
+    }
+    posts.push(newPost);
+    this.updateDb(this.state.jsonPlaceholderDB)
+  }
+
+  createUser = user => {
+    let { users } = this.state.jsonPlaceholderDB;
+    let newUserId = this.getNewId({ contentObj: 'user' });
+    let newUser = {
+      id: newUserId,
+      name: user.name,
+      userName: user.email,
+      email: user.email,
+      address: null
+    }
+    users.push(newUser);
+    this.updateDb(this.state.jsonPlaceholderDB)
+  }
+
 
   initDb = () => {
     let jsonPlaceholderDB = JSON.parse(localStorage.getItem('jsonPlaceholderDB'));
@@ -112,7 +150,13 @@ class App extends Component {
       todos = todos.filter(todo => todo.userId === this.state.selectedUser)
       posts = posts.filter(post => post.userId === this.state.selectedUser)
       return pug`
-        SelectedUser(todos = ${todos}, posts=${posts}, userId=${this.state.selectedUser}, completeTodo= ${this.completeTodo})
+        SelectedUser(
+          todos = ${todos}, 
+          posts=${posts}, 
+          userId=${this.state.selectedUser}, 
+          completeTodo= ${this.completeTodo},
+          renderSelectedUser=${this.renderSelectedUser}
+          )
       `
     }
     return null;
@@ -132,11 +176,19 @@ class App extends Component {
           updateUser: this.updateUser,
           selectUser:this.selectUser,
           createTodo: this.createTodo,
-          completeTodo: this.completeTodo
+          completeTodo: this.completeTodo,
+          createPost: this.createPost
         })
           .div.ui.container.app
             UserList(userList= ${users})
-            ${this.renderSelectedUser()}
+            if(this.state.userFlag)
+              UserForm(
+                setUserFlag = ${this.setUserFlag},
+                createUser = ${this.createUser},
+
+                )
+            else
+              ${this.renderSelectedUser()}
       `
     )
   }

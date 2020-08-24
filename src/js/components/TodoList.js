@@ -41,7 +41,7 @@ class TodoList extends Component {
         .selectedUser__title Todos - User ${this.props.userId}  
         button(style={'display':'block'}).btn.btn--small(onClick = event => {
           event.preventDefault();
-          this.props.setTodoFlag(true)
+          this.props.setTodoFlag({isOpen: true})
         }) 
           | Add
       .selectedUser__media-item

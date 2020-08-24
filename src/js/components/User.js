@@ -6,7 +6,7 @@ class User extends Component {
   constructor(props) {
     super(props)
     let { name, email, address } = props.user;
-    let { street, city, zipcode } = address;
+    let { street, city, zipcode } = address || { street: '', city: '', zipcode: '' };
     this.showOtherDataTimer = undefined;
 
     this.state = {

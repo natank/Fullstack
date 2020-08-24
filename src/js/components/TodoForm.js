@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import '../../styles/components/_selectedUser.scss';
 import '../../styles/Components/_newTodo.scss';
 import AppContext from '../Context/AppContext';
 
@@ -19,33 +18,43 @@ class TodoForm extends Component {
   handleAddTodo = event => {
     event.preventDefault();
     let { title } = this.state;
-    this.context.createTodo(this.state.title)
+    if (title.length === 0) return // don't allow todos w/ empty title
+    this.context.createTodo({ title })
     this.setState({ title: '' });
 
   }
 
-  handleCancelTodo = event => {
+  handleCloseForm = event => {
     event.preventDefault();
     this.setState({ title: '' })
+    this.props.setTodoFlag({ isOpen: false })
   }
 
   renderForm() {
-    if (this.props.todoForm === false) return null;
     return pug`
     .selectedUser__header
       .selectedUser__title New Todo - User ${this.props.userId}
-    form.ui.form.new-todo
+    form.ui.form.new-todo(onSubmit=${this.handleAddTodo})
       fieldset.new-todo__title
         .field.inline
           label Title :
           input(type = "text" 
-          placeholder="Add todo"  
-          onChange= event => this.handleTodoChange(event)
-          value=${this.state.title})
+                placeholder="Add todo"  
+                onChange= event => this.handleTodoChange(event)
+                value=${this.state.title}
+                tabIndex=1
+                )
       fieldset.new-todo__actions
-        button.btn(onClick=this.handleCancelTodo)
+        button.btn(
+          type="button" 
+          onClick=this.handleCloseForm
+          tabIndex=3
+          )
           | Cancel
-        button.btn(onClick=this.handleAddTodo)
+        button.btn(
+          type="submit"
+          tabIndex=2
+          )
           | Add
     `
   }

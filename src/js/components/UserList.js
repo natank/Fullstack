@@ -55,7 +55,7 @@ class UserList extends Component {
           .field.inline
             label Search :  
             input(type="text" placeholder="type here" onChange = ${this.onSearchTermChange})
-          button.ui.button 
+          button.ui.button(onClick=)
             | Add
         .ui.relaxed.divided.list ${ this.renderList()}
     `
