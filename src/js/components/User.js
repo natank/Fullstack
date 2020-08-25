@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+ import React, { Component } from 'react';
 import AppContext from '../Context/AppContext';
 import '../../styles/user.scss';
 class User extends Component {
@@ -100,7 +100,7 @@ class User extends Component {
           input(type = "text" 
             value = this.state.email
             onChange = event => this.handleUserDataChange(event, 'email'))
-        button.ui.button(
+        button.btn(
           onMouseEnter = this.onOtherBtnEnter 
           onMouseLeave = this.onOtherBtnLeave
           onClick = this.onOtherBtnClick)
@@ -108,7 +108,7 @@ class User extends Component {
 
         ${ this.renderOtherData()}
 
-        button.ui.button(onClick = event =>{
+        button.btn.btn--secondary(onClick = event =>{
             event.preventDefault();
             let {name, email, street, city, zipcode} = this.state;
             this.context.updateUser({
@@ -121,7 +121,7 @@ class User extends Component {
           })
         })   
           | Update
-        button.ui.button(onClick = event => {
+        button.btn.btn--secondary(onClick = event => {
           event.preventDefault();
           if(confirm("Delete user ?"))
           {

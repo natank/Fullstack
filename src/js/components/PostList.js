@@ -24,7 +24,7 @@ class PostList extends Component {
     return pug`
     .selectedUser__header
       div.selectedUser__title Posts - User ${this.props.userId}  
-      button.btn.btn--small(onClick=${() => {
+      button.btn.btn--secondary(onClick=${() => {
         this.props.setPostFlag({ isOpen: true })
       }})
         | Add

@@ -1,34 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import jsonPlaceholder from './API/jsonPlaceholder'
+
 import App from './components/App';
 
 
-/**
- * CREATE LOCAL DB FROM API
- */
 
-const createLocalDb = async () => {
 
-  let jsonPlaceholderDB = localStorage.getItem('jsonPlaceholderDB');
-  if (!jsonPlaceholderDB) {
-    jsonPlaceholderDB = {}
-    try {
-
-      jsonPlaceholderDB.posts = await jsonPlaceholder.get('/posts')
-      jsonPlaceholderDB.users = await jsonPlaceholder.get('/users')
-      jsonPlaceholderDB.todos = await jsonPlaceholder.get('/todos')
-    } catch (err) {
-      console.log(err)
-    }
-    jsonPlaceholderDB.posts = jsonPlaceholderDB.posts.data;
-    jsonPlaceholderDB.users = jsonPlaceholderDB.users.data;
-    jsonPlaceholderDB.todos = jsonPlaceholderDB.todos.data;
-
-    let data = JSON.stringify(jsonPlaceholderDB);
-    localStorage.setItem('jsonPlaceholderDB', data)
-  }
-}
 
 ReactDOM.render(pug`
   App

@@ -4,17 +4,69 @@ import UserList from './UserList';
 import SelectedUser from './SelectedUser';
 import UserForm from './UserForm';
 import '../../styles/Components/app.scss'
+import jsonPlaceholder from '../API/jsonPlaceholder'
 
 class App extends Component {
   constructor(props) {
     super(props);
-    let jsonPlaceholderDB = this.initDb();
     this.state = {
-      jsonPlaceholderDB: jsonPlaceholderDB,
+      jsonPlaceholderDB: null,
       selectedUser: { userId: undefined },
       userFlag: false
     }
   }
+  
+  async componentDidMount(){
+    // Create a persistent local storage
+    let jsonPlaceholderDB = await this.initDb();
+    this.setState({jsonPlaceholderDB})
+  }
+  
+  initDb = async () => {
+    let jsonPlaceholderDB = JSON.parse(localStorage.getItem('jsonPlaceholderDB'));
+    // for persistent localStorage value, we initialize jsonPlaceholderDb from network only if it not exists
+    if(!jsonPlaceholderDB){
+      await this.createLocalDb()
+      jsonPlaceholderDB = JSON.parse(localStorage.getItem('jsonPlaceholderDB'));
+    }
+    let { posts, users, todos } = jsonPlaceholderDB;
+    jsonPlaceholderDB = {
+      posts,
+      users,
+      todos
+    }
+    return jsonPlaceholderDB;
+  }
+
+/**
+ * CREATE LOCAL DB FROM API
+ */
+
+createLocalDb = async () => {
+
+  let jsonPlaceholderDB = localStorage.getItem('jsonPlaceholderDB');
+  if (!jsonPlaceholderDB) {
+    jsonPlaceholderDB = {}
+    try {
+
+      jsonPlaceholderDB.posts = await jsonPlaceholder.get('/posts')
+      jsonPlaceholderDB.users = await jsonPlaceholder.get('/users')
+      jsonPlaceholderDB.todos = await jsonPlaceholder.get('/todos')
+    } catch (err) {
+      console.log(err)
+    }
+    jsonPlaceholderDB.posts = jsonPlaceholderDB.posts.data;
+    jsonPlaceholderDB.users = jsonPlaceholderDB.users.data;
+    jsonPlaceholderDB.todos = jsonPlaceholderDB.todos.data;
+
+    let data = JSON.stringify(jsonPlaceholderDB);
+    localStorage.setItem('jsonPlaceholderDB', data)
+  }
+}
+
+
+
+
 
   setUserFlag = settings => this.setState({ userFlag: settings.isOpen });
 
@@ -135,18 +187,6 @@ class App extends Component {
 
 
 
-
-  initDb = () => {
-    let jsonPlaceholderDB = JSON.parse(localStorage.getItem('jsonPlaceholderDB'));
-    let { posts, users, todos } = jsonPlaceholderDB;
-    jsonPlaceholderDB = {
-      posts,
-      users,
-      todos
-    }
-    return jsonPlaceholderDB;
-  }
-
   updateDb(newDb) {
     localStorage.setItem('jsonPlaceholderDB', JSON.stringify(newDb));
     let jsonPlaceholderDB = JSON.parse(localStorage.getItem('jsonPlaceholderDB'))
@@ -191,7 +231,7 @@ class App extends Component {
 
   render() {
 
-    if (!this.state.jsonPlaceholderDB) return;
+    if (!this.state.jsonPlaceholderDB) return null;
     const { users } = this.state.jsonPlaceholderDB;
 
     this.determineUsersTodos();
@@ -207,7 +247,7 @@ class App extends Component {
           completeTodo: this.completeTodo,
           createPost: this.createPost
         })
-          .div.ui.container.app
+          .app
             UserList(
               userList= ${users}, 
               setUserFlag=${this.setUserFlag}

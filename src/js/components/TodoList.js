@@ -13,7 +13,7 @@ class TodoList extends Component {
       if (!todo.completed) {
 
         markCompletedBtn = pug`
-          button.btn.wide(onClick = ${() => this.context.completeTodo(todo.id)}) Mark Completed
+          button.btn.btn--secondary(onClick = ${() => this.context.completeTodo(todo.id)}) Mark Completed
         `
       }
       return pug`
@@ -36,7 +36,7 @@ class TodoList extends Component {
     return pug`
       .selectedUser__header
         .selectedUser__title Todos - User ${this.props.userId}  
-        button(style={'display':'block'}).btn.btn--small(onClick = event => {
+        button.btn.btn--secondary(style={'display':'block'}).btn.btn--small(onClick = event => {
           event.preventDefault();
           this.props.setTodoFlag({isOpen: true})
         }) 

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import User from './User'
-import userList from '../../styles/userList.scss'
+import '../../styles/userList.scss'
 
 class UserList extends Component {
 
@@ -52,12 +52,12 @@ class UserList extends Component {
   render() {
     return pug`
       .userList
-        form.ui.form.userList__search 
-          .field.inline
+        .userList__header
+          .userList__search 
             label Search :  
             input(type="text" placeholder="type here" onChange = ${this.onSearchTermChange})
-          .field.userList__add
-            button.ui.button(onClick=event=>{
+          .userList__add
+            button.btn.btn--secondary(onClick=event=>{
             event.preventDefault()
             this.props.setUserFlag({isOpen: true})
           })
