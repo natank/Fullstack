@@ -15,17 +15,19 @@ class App extends Component {
       userFlag: false
     }
   }
-  
-  async componentDidMount(){
+
+  async componentDidMount() {
     // Create a persistent local storage
     let jsonPlaceholderDB = await this.initDb();
-    this.setState({jsonPlaceholderDB})
+    this.setState({ jsonPlaceholderDB })
   }
-  
+
+  /** DB Methods  */
+
   initDb = async () => {
     let jsonPlaceholderDB = JSON.parse(localStorage.getItem('jsonPlaceholderDB'));
     // for persistent localStorage value, we initialize jsonPlaceholderDb from network only if it not exists
-    if(!jsonPlaceholderDB){
+    if (!jsonPlaceholderDB) {
       await this.createLocalDb()
       jsonPlaceholderDB = JSON.parse(localStorage.getItem('jsonPlaceholderDB'));
     }
@@ -37,65 +39,39 @@ class App extends Component {
     }
     return jsonPlaceholderDB;
   }
+  createLocalDb = async () => {
 
-/**
- * CREATE LOCAL DB FROM API
- */
+    let jsonPlaceholderDB = localStorage.getItem('jsonPlaceholderDB');
+    if (!jsonPlaceholderDB) {
+      jsonPlaceholderDB = {}
+      try {
 
-createLocalDb = async () => {
+        jsonPlaceholderDB.posts = await jsonPlaceholder.get('/posts')
+        jsonPlaceholderDB.users = await jsonPlaceholder.get('/users')
+        jsonPlaceholderDB.todos = await jsonPlaceholder.get('/todos')
+      } catch (err) {
+        console.log(err)
+      }
+      jsonPlaceholderDB.posts = jsonPlaceholderDB.posts.data;
+      jsonPlaceholderDB.users = jsonPlaceholderDB.users.data;
+      jsonPlaceholderDB.todos = jsonPlaceholderDB.todos.data;
 
-  let jsonPlaceholderDB = localStorage.getItem('jsonPlaceholderDB');
-  if (!jsonPlaceholderDB) {
-    jsonPlaceholderDB = {}
-    try {
-
-      jsonPlaceholderDB.posts = await jsonPlaceholder.get('/posts')
-      jsonPlaceholderDB.users = await jsonPlaceholder.get('/users')
-      jsonPlaceholderDB.todos = await jsonPlaceholder.get('/todos')
-    } catch (err) {
-      console.log(err)
+      let data = JSON.stringify(jsonPlaceholderDB);
+      localStorage.setItem('jsonPlaceholderDB', data)
     }
-    jsonPlaceholderDB.posts = jsonPlaceholderDB.posts.data;
-    jsonPlaceholderDB.users = jsonPlaceholderDB.users.data;
-    jsonPlaceholderDB.todos = jsonPlaceholderDB.todos.data;
-
-    let data = JSON.stringify(jsonPlaceholderDB);
-    localStorage.setItem('jsonPlaceholderDB', data)
   }
-}
+
+  updateDb = newDb => {
+    localStorage.setItem('jsonPlaceholderDB', JSON.stringify(newDb));
+    let jsonPlaceholderDB = JSON.parse(localStorage.getItem('jsonPlaceholderDB'))
+    this.setState({ jsonPlaceholderDB })
+  }
 
 
-
-
+  /** User Methods */
 
   setUserFlag = settings => this.setState({ userFlag: settings.isOpen });
 
-  selectUser = id => {
-    let userExists = this.checkUserExists(id)
-    if (userExists) {
-      this.setState({ selectedUser: { userId: id } })
-    }
-  }
-
-  checkUserExists(userId) {
-    // check if user with the id exists
-    let { users } = this.state.jsonPlaceholderDB;
-    return users.some(user => user.id === userId)
-  }
-
-  createUser = user => {
-    let { users } = this.state.jsonPlaceholderDB;
-    let newUserId = this.getNewId({ contentObj: 'user' });
-    let newUser = {
-      id: newUserId,
-      name: user.name,
-      userName: user.email,
-      email: user.email,
-      address: null
-    }
-    users.push(newUser);
-    this.updateDb(this.state.jsonPlaceholderDB)
-  }
 
   updateUser = userDetails => {
     let { name, email, street, city, zipcode } = userDetails;
@@ -130,31 +106,33 @@ createLocalDb = async () => {
     this.updateDb(db)
   }
 
-  completeTodo = id => {
-    let { todos } = this.state.jsonPlaceholderDB;
-    for (let i = 0; i < todos.length; i++) {
-      if (todos[i].id === id) {
-        todos[i].completed = true;
-        break;
-      }
+  selectUser = id => {
+    let userExists = this.checkUserExists(id)
+    if (userExists) {
+      this.setState({ selectedUser: { userId: id } })
     }
+  }
+
+  checkUserExists = userId => {
+    // check if user with the id exists
+    let { users } = this.state.jsonPlaceholderDB;
+    return users.some(user => user.id === userId)
+  }
+
+  createUser = user => {
+    let { users } = this.state.jsonPlaceholderDB;
+    let newUserId = this.getNewId({ contentObj: 'user' });
+    let newUser = {
+      id: newUserId,
+      name: user.name,
+      userName: user.email,
+      email: user.email,
+      address: null
+    }
+    users.push(newUser);
     this.updateDb(this.state.jsonPlaceholderDB)
   }
-
-
-  getNewId(settings) {
-
-    let { users, todos, posts } = this.state.jsonPlaceholderDB;
-    let contentArray;
-    if (settings.contentObj === 'todo') contentArray = todos;
-    else if (settings.contentObj === 'post') contentArray = posts;
-    else if (settings.contentObj === 'user') contentArray = users;
-    else throw ("unknown content array name")
-    let newId = contentArray.length;
-    while (contentArray[newId !== undefined]) newId++
-    return newId + 1;
-  }
-
+  /** Todo Methods */
 
   createTodo = todo => {
     // create a new todo and add it to the todo list
@@ -171,6 +149,31 @@ createLocalDb = async () => {
     todos.push(newTodo);
     this.updateDb(this.state.jsonPlaceholderDB);
   }
+  completeTodo = id => {
+    let { todos } = this.state.jsonPlaceholderDB;
+    for (let i = 0; i < todos.length; i++) {
+      if (todos[i].id === id) {
+        todos[i].completed = true;
+        break;
+      }
+    }
+    this.updateDb(this.state.jsonPlaceholderDB)
+  }
+
+  /** Generic function to get an id for a new user/todo/post */
+  getNewId = settings => {
+    // the setting object specifies the contentObj name (e.g todo/user/post)
+
+    /**content array's name is the plural of contentObj (e.g. todo=>todos)*/
+    let contentArray = this.state.jsonPlaceholderDB[`${settings.contentObj}s`]
+
+    if (contentArray == undefined) throw ("unknown content array name")
+    let lastIndex = contentArray.length - 1;
+    let newId = contentArray[lastIndex].id + 1;
+    return newId;
+  }
+
+
 
   createPost = post => {
     let { posts } = this.state.jsonPlaceholderDB;
@@ -184,15 +187,6 @@ createLocalDb = async () => {
     posts.push(newPost);
     this.updateDb(this.state.jsonPlaceholderDB)
   }
-
-
-
-  updateDb(newDb) {
-    localStorage.setItem('jsonPlaceholderDB', JSON.stringify(newDb));
-    let jsonPlaceholderDB = JSON.parse(localStorage.getItem('jsonPlaceholderDB'))
-    this.setState({ jsonPlaceholderDB })
-  }
-
   determineUsersTodos = function () {
     const { users, todos } = this.state.jsonPlaceholderDB
 
@@ -207,11 +201,7 @@ createLocalDb = async () => {
     })
   }
 
-
-
-
-
-  renderSelectedUser() {
+  renderSelectedUser = () => {
     let { todos, posts } = this.state.jsonPlaceholderDB;
 
     todos = todos.filter(todo => todo.userId === this.state.selectedUser.userId)

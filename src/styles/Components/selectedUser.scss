@@ -1,4 +1,5 @@
-@import '../abstracts/abstracts';
+@import '../Abstracts/abstracts';
+
 .selectedUser {
     & > * {
         margin-bottom: 1rem;
@@ -18,14 +19,14 @@
         justify-content: space-between;
     }
     &__list-item {
-        border: 1px solid black;
+        border: 2px solid $color-action;
         margin-bottom: 1rem;
         padding: 1rem;
         display: grid;
         grid-template-columns: 1;
         grid-gap: .5rem;
     }
-    &__data-item{
+    &__data-item{ 
         display: grid;
         gap: 1rem;
         grid-template: auto/1fr 5fr

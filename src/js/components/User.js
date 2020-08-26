@@ -1,6 +1,6 @@
- import React, { Component } from 'react';
+import React, { Component } from 'react';
 import AppContext from '../Context/AppContext';
-import '../../styles/user.scss';
+import '../../styles/Components/user.scss';
 class User extends Component {
   static contextType = AppContext
   constructor(props) {
@@ -58,17 +58,17 @@ class User extends Component {
   renderOtherData = function () {
     if (this.state.isShowOtherData) return pug`
     section.user__other-data
-      .field.inline
+      .field.user__other-data__field
         label Street:
         input(type="text" 
           value=this.state.street
           onChange = event => this.handleUserDataChange(event, 'street'))
-      .field.inline
+      .field.user__other-data__field
         label City:
         input(type="text" 
           value=this.state.city
           onChange = event => this.handleUserDataChange(event, 'city'))
-      .field.inline
+      .field.user__other-data__field
         label Zip Code:
         input(type="text" value=this.state.zipcode
           onChange = event => this.handleUserDataChange(event, 'zipcode'))
@@ -100,36 +100,39 @@ class User extends Component {
           input(type = "text" 
             value = this.state.email
             onChange = event => this.handleUserDataChange(event, 'email'))
-        button.btn(
-          onMouseEnter = this.onOtherBtnEnter 
-          onMouseLeave = this.onOtherBtnLeave
-          onClick = this.onOtherBtnClick)
-          | Other Data
+        .fieldset.user__actions
+          .user__actions--other
+            button.btn(
+              onMouseEnter = this.onOtherBtnEnter 
+              onMouseLeave = this.onOtherBtnLeave
+              onClick = this.onOtherBtnClick)
+              | Other Data
 
-        ${ this.renderOtherData()}
-
-        button.btn.btn--secondary(onClick = event =>{
-            event.preventDefault();
-            let {name, email, street, city, zipcode} = this.state;
-            this.context.updateUser({
-            id: this.props.user.id, 
-            name,
-            email,
-            street,
-            city,
-            zipcode
-          })
-        })   
-          | Update
-        button.btn.btn--secondary(onClick = event => {
-          event.preventDefault();
-          if(confirm("Delete user ?"))
-          {
-            this.context.deleteUser({userId: this.props.user.id})
-          }
-          else return
-        })
-          | Delete
+          .user__actions--end
+            ${ this.renderOtherData()}
+            .user__actions--update
+              button.btn.btn--secondary(onClick = event =>{
+                  event.preventDefault();
+                  let {name, email, street, city, zipcode} = this.state;
+                  this.context.updateUser({
+                  id: this.props.user.id, 
+                  name,
+                  email,
+                  street,
+                  city,
+                  zipcode
+                })
+              })   
+                | Update
+              button.btn.btn--secondary(onClick = event => {
+                event.preventDefault();
+                if(confirm("Delete user ?"))
+                {
+                  this.context.deleteUser({userId: this.props.user.id})
+                }
+                else return
+              })
+                | Delete
       `
 
   }

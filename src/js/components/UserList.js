@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import User from './User'
-import '../../styles/userList.scss'
+import '../../styles/Components/userList.scss'
 
 class UserList extends Component {
 

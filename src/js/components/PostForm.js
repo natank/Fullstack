@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import '../../styles/Components/_newTodo.scss';
+import '../../styles/Components/todoForm.scss';
 import AppContext from '../Context/AppContext';
 class PostForm extends Component {
   static contextType = AppContext;
@@ -60,9 +60,9 @@ class PostForm extends Component {
               )
                 
       fieldset.new-todo__actions
-        button.btn(type="button" onClick=this.handleCloseForm)
+        button.btn.btn--secondary(type="button" onClick=this.handleCloseForm)
           | Cancel
-        button.btn(type="submit")
+        button.btn.btn--secondary(type="submit")
           | Add
     `
   }

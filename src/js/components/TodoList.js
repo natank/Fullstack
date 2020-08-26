@@ -23,7 +23,7 @@ class TodoList extends Component {
             div ${todo.title}
           .selectedUser__data-item
             div Completed: 
-            div(style={'display':'flex', 'justify-content': 'space-between'})
+            div(style={'display':'flex', 'justifyContent': 'space-between'})
               div ${todo.completed.toString()}
               div ${markCompletedBtn}
       `

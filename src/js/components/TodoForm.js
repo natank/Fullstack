@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import '../../styles/Components/_newTodo.scss';
+import '../../styles/Components/todoForm.scss';
 import AppContext from '../Context/AppContext';
 
 class TodoForm extends Component {
@@ -45,13 +45,13 @@ class TodoForm extends Component {
                 tabIndex=1
                 )
       fieldset.new-todo__actions
-        button.btn(
+        button.btn.btn--secondary(
           type="button" 
           onClick=this.handleCloseForm
           tabIndex=3
           )
           | Cancel
-        button.btn(
+        button.btn.btn--secondary(
           type="submit"
           tabIndex=2
           )

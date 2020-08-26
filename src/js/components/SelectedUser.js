@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import '../../styles/components/_selectedUser.scss';
+import '../../styles/components/selectedUser.scss';
 import TodoForm from './TodoForm';
 import PostForm from './PostForm';
 import TodoList from './TodoList';
