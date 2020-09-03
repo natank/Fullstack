@@ -5,66 +5,36 @@ class UserForm extends Component {
   constructor(props) {
     super(props)
     this.state = {
+      userId: '',
       name: '',
       email: ''
     }
   }
 
-  handleUserDataChange = (event, field) => {
-    let stateObj = {}
+  componentDidMount(){
+    
 
-    let value = event.target.value;
-
-    stateObj[field] = value;
-
-    this.setState(stateObj)
-  }
-
-  handleCloseForm = event => {
-    event.preventDefault();
-    this.setState({ name: '', email: '' })
-    this.props.setUserFlag({ isOpen: false })
-  }
-
-  handleAddPost = event => {
-    event.preventDefault();
-    let { name, email } = this.state;
-    if (name.length === 0 || email.length === 0) return //don't allow empty name or email
-    this.props.createUser({ name, email });
-    this.setState({ name: '', email: '' })
   }
 
   render() {
-    if (this.props.postForm === false) return null;
     return pug`
-    div
-      .selectedUser__header
-        .selectedUser__title Add new user
-      form.ui.form.new-todo(onSubmit=${this.handleAddPost})
-        fieldset.new-todo__title
-          .field.inline
-            label Name :
-            input(
-              type = "text" 
-              placeholder="Add name"  
-              onChange=event=> this.handleUserDataChange(event, 'name') 
-              value=${this.state.name}
-              tabIndex=1
-            )
-          .field.inline
-            label Email :
-            input(type = "text" 
-                  placeholder="Add email" 
-                  onChange=(event)=> this.handleUserDataChange(event, 'email') value=${this.state.email}
-                  tabIndex=2
-                )
-                  
-        fieldset.new-todo__actions
-          button.btn(type="button" onClick=this.handleCloseForm)
-            | Cancel
-          button.btn(type="submit")
-            | Add
-    `
+      div 
+        form.user-form 
+          div.form-field
+            label(for="userId") User ID
+            input#userId(type="text" value=${this.state.userId} onChange=e=>this.setState({userId: e.target.value}))
+            input(type="button" value=${"Get Data"} onClick=${()=>this.props.getUser(this.state.userId)})
+          div.form-field
+            label(for="name") Name
+            input#name(type="text" value=${this.state.name} onChange=e=>this.setState({name: e.target.value}))
+          div.form-field
+            label(for="email") Email
+            input#email(type="text" value=${this.state.email} onChange=e=>this.setState({email: e.target.value}))
+          input(type="button" value=${"Update"} onClick=${()=>{
+            let {userId, name, email} = this.state;
+            this.props.updateUser({userId, email, name})
+          }})
+        `
   }
 }
 
