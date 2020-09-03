@@ -7,7 +7,8 @@ class UserForm extends Component {
     this.state = {
       userId: '',
       name: '',
-      email: ''
+      email: '',
+      mode: "create"
     }
   }
 
@@ -17,11 +18,12 @@ class UserForm extends Component {
   }
 
   componentDidUpdate(prevProps, prevState){
-    if(this.props.user && prevState.name != this.props.user.name) {
+    if(this.state.mode !== "edit") {
       this.setState ( {
         userId: this.props.user.userId,
         name: this.props.user.name,
-        email: this.props.user.email
+        email: this.props.user.email,
+        mode: "edit"
       })
     }
   }
@@ -32,17 +34,27 @@ class UserForm extends Component {
         form.user-form 
           div.form-field
             label(for="userId") User ID
-            input#userId(type="text" value=${this.state.userId} onChange=e=>this.setState({userId: e.target.value}))
-            input(type="button" value=${"Get Data"} onClick=${()=>this.props.getUser(this.state.userId)})
+            input#userId(type="text" value=${this.state.userId} onChange=e=>this.setState({userId: e.target.value, mode:"edit"}))
+            input(type="button" value=${"Get Data"} onClick=${()=>{
+              this.props.getUser(this.state.userId)
+              this.setState({mode:"new"})
+            }
+          })
+
+            
           div.form-field
             label(for="name") Name
-            input#name(type="text" value=${this.state.name} onChange=e=>this.setState({name: e.target.value}))
+            input#name(type="text" value=${this.state.name} onChange=e=>{
+              this.setState({name: e.target.value, mode: "edit"})
+              console.log(e.target.value)
+            })
           div.form-field
             label(for="email") Email
-            input#email(type="text" value=${this.state.email} onChange=e=>this.setState({email: e.target.value}))
+            input#email(type="text" value=${this.state.email} onChange=e=>this.setState({email: e.target.value, mode:"edit"}))
           input(type="button" value=${"Update"} onClick=${()=>{
             let {userId, name, email} = this.state;
             this.props.updateUser({userId, email, name})
+            this.setState({mode:"update"})
           }})
         `
   }

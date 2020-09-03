@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import loadUsers from './Utils/utils'
+import utils from './Utils/utils'
 
 import App from './components/App';
 
-loadUsers();
+utils.loadUsers();
 
 ReactDOM.render(pug`
   App
