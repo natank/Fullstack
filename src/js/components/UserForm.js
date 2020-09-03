@@ -16,6 +16,16 @@ class UserForm extends Component {
 
   }
 
+  componentDidUpdate(prevProps, prevState){
+    if(this.props.user && prevState.name != this.props.user.name) {
+      this.setState ( {
+        userId: this.props.user.userId,
+        name: this.props.user.name,
+        email: this.props.user.email
+      })
+    }
+  }
+
   render() {
     return pug`
       div 
