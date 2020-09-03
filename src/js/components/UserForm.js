@@ -5,57 +5,41 @@ class UserForm extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      userId: '',
-      name: '',
-      email: '',
-      mode: "create"
+      name: undefined,
+      age: undefined,
+      city: undefined,
+      isAdult: undefined
     }
   }
 
-  componentDidMount(){
-    
 
+  submitDetails = ()=>{
+    let {name, age, city, isAdult} = this.state;
+    this.props.setUser({
+      name, age, city, isAdult
+    })
   }
-
-  componentDidUpdate(prevProps, prevState){
-    if(this.state.mode !== "edit") {
-      this.setState ( {
-        userId: this.props.user.userId,
-        name: this.props.user.name,
-        email: this.props.user.email,
-        mode: "edit"
-      })
-    }
-  }
-
   render() {
     return pug`
       div 
-        form.user-form 
-          div.form-field
-            label(for="userId") User ID
-            input#userId(type="text" value=${this.state.userId} onChange=e=>this.setState({userId: e.target.value, mode:"edit"}))
-            input(type="button" value=${"Get Data"} onClick=${()=>{
-              this.props.getUser(this.state.userId)
-              this.setState({mode:"new"})
-            }
-          })
-
-            
+        form.user-form(onSubmit=${this.submitDetails})
           div.form-field
             label(for="name") Name
-            input#name(type="text" value=${this.state.name} onChange=e=>{
-              this.setState({name: e.target.value, mode: "edit"})
-              console.log(e.target.value)
+            input#name(type="text" value=${this.state.name} onChange=e=>this.setState({name: e.target.value})) 
+          div.form-field
+            label(for="age") Age
+            input#name(type="text" value=${this.state.age} onChange=e=>{
+              this.setState({age: e.target.value})
             })
           div.form-field
-            label(for="email") Email
-            input#email(type="text" value=${this.state.email} onChange=e=>this.setState({email: e.target.value, mode:"edit"}))
-          input(type="button" value=${"Update"} onClick=${()=>{
-            let {userId, name, email} = this.state;
-            this.props.updateUser({userId, email, name})
-            this.setState({mode:"update"})
-          }})
+            label(for="city") City
+            select#city(name="city" value=${this.state.city} onSelect=e=>this.setState({city: e.target.value}))
+          
+          div.form-field
+            label(for="isAdult") is Adult:
+              
+          div.form-field
+            input(type="submit") Add
         `
   }
 }

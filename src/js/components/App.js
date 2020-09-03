@@ -6,13 +6,18 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: undefined
+      users: [{
+        name: "Avi",
+        age: 42,
+        city: "Haifa",
+        isAdult: true
+      }]
     }
   }
   
 
   
-  getUser = id => {
+  getUser = settings => {
     let user = utils.getUser(id)
     let {name, email} = user;
     this.setState({
@@ -20,18 +25,24 @@ class App extends Component {
     }) 
   }
 
-  
-  updateUser = settings => {
-    utils.updateUser(settings);
-    this.getUser(this.state.user.userId)
+  renderUsers(){
+    return this.state.users.map((user, index)=>{
+      let {name, age, city, adult} = user;
+      return pug`
+        li(key=${index})
+          ${`${name} is ${age} years old, lives in ${city}, and he is ${adult ? 'not': ''} an adult`}
+      `
+    })
+  }  
 
-    
-  }
   render() {
 
     return (
       pug`
-        UserForm(user=${this.state.user} getUser=${this.getUser} updateUser=${this.updateUser} key1=${0})
+        h1 Parent Form
+        ul
+          ${this.renderUsers()}
+        UserForm( getUser=${this.getUser} key1=${0})
       `
     )
   }
