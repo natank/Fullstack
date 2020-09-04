@@ -1,11 +1,13 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import utils from './Utils/utils'
+import React from "react";
+import ReactDOM from "react-dom";
+import { BrowserRouter } from "react-router-dom";
 
-import App from './components/App';
+import App from "./components/App";
 
-utils.loadUsers();
-
-ReactDOM.render(pug`
-  App
-`, document.querySelector('#root'))
+ReactDOM.render(
+  pug`
+  ${BrowserRouter}
+    App
+`,
+  document.querySelector("#root")
+);

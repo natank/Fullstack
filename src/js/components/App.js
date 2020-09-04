@@ -1,52 +1,25 @@
 import React, { Component } from "react";
-import UserForm from './UserForm'
-import utils from '../Utils/utils'
+import { Link, Route, Switch } from "react-router-dom";
+import stage1 from "./stage1";
+import stage2 from "./stage2";
+import stage3 from "./stage3";
+import stage4 from "./stage4";
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      users: [{
-        name: "Avi",
-        age: 42,
-        city: "Haifa",
-        isAdult: true
-      }]
-    }
+    this.state = {};
   }
-  
-
-  
-  getUser = settings => {
-    let user = utils.getUser(id)
-    let {name, email} = user;
-    this.setState({
-      user: {userId: id, name, email}
-    }) 
-  }
-
-  renderUsers(){
-    return this.state.users.map((user, index)=>{
-      let {name, age, city, adult} = user;
-      return pug`
-        li(key=${index})
-          ${`${name} is ${age} years old, lives in ${city}, and he is ${adult ? 'not': ''} an adult`}
-      `
-    })
-  }  
 
   render() {
-
-    return (
-      pug`
-        h1 Parent Form
-        ul
-          ${this.renderUsers()}
-        UserForm( getUser=${this.getUser} key1=${0})
-      `
-    )
+    return pug`
+      Switch
+        Route(path="/" exact component=${stage1})
+        Route(path="/stage2" component=${stage2})
+        Route(path="/stage3" component=${stage3})
+        Route(path="/stage4" component=${stage4})
+      `;
   }
-
 }
 
-export default App
+export default App;
