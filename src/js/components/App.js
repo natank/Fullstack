@@ -1,52 +1,31 @@
-import React, { Component } from "react";
-import UserForm from './UserForm'
-import utils from '../Utils/utils'
+import React from "react";
+import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
+import '../../styles/components/app.scss';
+import Nav from './Nav'
+import About from './About'
+import Shop from './Shop'
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      users: [{
-        name: "Avi",
-        age: 42,
-        city: "Haifa",
-        isAdult: true
-      }]
-    }
-  }
-  
 
-  
-  getUser = settings => {
-    let user = utils.getUser(id)
-    let {name, email} = user;
-    this.setState({
-      user: {userId: id, name, email}
-    }) 
-  }
-
-  renderUsers(){
-    return this.state.users.map((user, index)=>{
-      let {name, age, city, adult} = user;
-      return pug`
-        li(key=${index})
-          ${`${name} is ${age} years old, lives in ${city}, and he is ${adult ? 'not': ''} an adult`}
-      `
-    })
-  }  
-
-  render() {
-
+const App = () => {
     return (
-      pug`
-        h1 Parent Form
-        ul
-          ${this.renderUsers()}
-        UserForm( getUser=${this.getUser} key1=${0})
-      `
+        <div className="App">
+          <Router>
+            <Nav />
+            <Switch>
+              <Route path='/' exact component={Home} />
+              <Route path="/about" component={About} />
+              <Route path="/shop" component={Shop} />
+            </Switch>
+          </Router>
+
+        </div>
     )
   }
 
+const Home = ()=>{
+  return(
+  <div>
+    <h1>Home Page</h1>
+  </div>)
 }
-
 export default App

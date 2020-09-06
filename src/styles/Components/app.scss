@@ -1,8 +1,20 @@
-.app {
-  display: grid !important;
-  gap: 3rem;
-  grid-template-columns: repeat(2, 1fr);
-  width: 60%;
-  margin: 2rem auto;
-  
+.App {
+  text-align: center;  
+}
+
+nav{
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  min-height: 10vh;
+  background: rgb(73, 79,82);
+  color: white
+}
+
+.nav-links{
+  width: 50%;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  list-style: none;
 }
