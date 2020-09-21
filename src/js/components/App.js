@@ -1,32 +1,43 @@
 import React from "react";
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
+import { Link, Switch, Route } from 'react-router-dom';
 import '../../styles/components/app.scss';
-import Nav from './Nav'
-import About from './About'
-import Shop from './Shop'
-import ItemDetail from './ItemDetail'
 
-const App = () => {
+import Products from './Products'
+import Category from './Category'
+
+function Home() {
   return (
-    <div className="App">
-      <Router>
-        <Nav />
-        <Switch>
-          <Route path='/' exact component={Home} />
-          <Route path="/about" component={About} />
-          <Route path="/shop" exact component={Shop} />
-          <Route path="/shop/:id" component={ItemDetail} />
-        </Switch>
-      </Router>
-
+    <div>
+      <h2>Home</h2>
     </div>
   )
 }
 
-const Home = () => {
+
+
+
+
+export default function App({ match }) {
+  console.log(`App match: ${match}`)
   return (
-    <div>
-      <h1>Home Page</h1>
-    </div>)
+    <div className="App">
+      <nav className="navbar navbar-light">
+        <ul className="nav navbar-nav">
+          <li>
+            <Link to="/">Homes</Link>
+          </li>
+          <li>
+            <Link to="/category">Category</Link>
+          </li>
+          <li>
+            <Link to="/products">Products</Link>
+          </li>
+        </ul>
+      </nav>
+      <Route exact path="/" component={Home} />
+      <Route path="/category" component={Category} />
+      <Route path="/products" component={Products} />
+    </div>
+  )
 }
-export default App
+
