@@ -1,41 +1,16 @@
 {
-  "name": "webpack-react-tutorial",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "fullstack",
+  "version": "0.0.0",
+  "private": true,
   "scripts": {
-    "build": "webpack --mode production",
-    "start": "webpack-dev-server --open --mode development"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "@babel/core": "^7.10.3",
-    "@babel/plugin-transform-runtime": "^7.10.4",
-    "@babel/preset-env": "^7.10.3",
-    "@babel/preset-react": "^7.10.1",
-    "babel-loader": "^8.1.0",
-    "babel-plugin-transform-react-pug": "^7.0.1",
-    "html-loader": "^1.1.0",
-    "html-webpack-plugin": "^4.3.0",
-    "sass": "^1.26.10",
-    "sass-loader": "^9.0.3",
-    "webpack": "^4.43.0",
-    "webpack-cli": "^3.3.12",
-    "webpack-dev-server": "^3.11.0"
+    "start": "node ./bin/www"
   },
   "dependencies": {
-    "axios": "^0.19.2",
-    "css-loader": "^3.6.0",
-    "jsonfile": "^6.0.1",
-    "lodash": "^4.17.19",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-redux": "^7.2.1",
-    "react-router-dom": "^5.2.0",
-    "redux": "^4.0.5",
-    "redux-thunk": "^2.3.0",
-    "style-loader": "^1.2.1"
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "ejs": "~2.6.1",
+    "express": "~4.16.1",
+    "http-errors": "~1.6.3",
+    "morgan": "~1.9.1"
   }
 }
