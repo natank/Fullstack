@@ -1,11 +1,39 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
+  
   <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
+      <form action="/user/create" method="POST">
+         <div>
+           <label> 
+            First Name: 
+             <input name="FirstName" />
+            </label>
+         </div>
+         <div>
+           <label> 
+            Last Name: 
+             <input name="LastName" />
+          </label>
+        </div>
+        Gender: </br>
+        <input type="radio" id="male" name="gender" value="male">
+        <label for="male">Male</label><br>
+        <input type="radio" id="female" name="gender" value="female">
+        <label for="female">Female</label><br>
+        <label>Adult?
+          <input type="checkbox" checked="checked" name="adult">
+        </label>
+        <label>City
+          <select name="city" id="city">
+            <option value="TelAviv">Tel Aviv</option>
+            <option value="Ashkelon">Ashkelon</option>
+            <option value="BeerSheva">Beer Sheva</option>
+            <option value="Hadera">Hadera</option>
+          </select>
+      </label>
+        <br/>
+         <input type="submit">
+
+      </form>
   </body>
 </html>
