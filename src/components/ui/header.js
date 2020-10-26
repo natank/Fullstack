@@ -1,7 +1,8 @@
 import React from 'react'
-import { AppBar, Toolbar, useScrollTrigger } from '@material-ui/core/'
-import Typography from '@material-ui/core/Typography'
+import { AppBar, Button, Toolbar, useScrollTrigger, Tabs, Tab } from '@material-ui/core/'
 import { makeStyles } from '@material-ui/styles'
+import logo from '../../assets/logo.svg'
+
 
 function ElevationScroll(props) {
   const { children } = props;
@@ -18,7 +19,26 @@ function ElevationScroll(props) {
 
 const useStyles = makeStyles(theme => ({
   toolbarMargin: {
-    ...theme.mixins.toolbar
+    ...theme.mixins.toolbar,
+    marginBottom: "3em"
+  },
+  logo: {
+    height: "7em"
+  },
+  tabContainer: {
+    marginLeft: 'auto'
+  },
+  tab: {
+    ...theme.typography.tab,
+    minWidth: 10,
+    marginLeft: "25px"
+  },
+  button: {
+    ...theme.Typography.estimate,
+    borderRadius: "50px",
+    marginLeft: "50px",
+    marginRight: "25px",
+    height: "45px",
   }
 }))
 
@@ -29,15 +49,24 @@ export default function Header(props) {
     <React.Fragment>
       <ElevationScroll>
         <AppBar position="fixed">
-          <Toolbar>
-            <Typography variant="h3">
-              Arc Development
-          </Typography>
+          <Toolbar disableGutters>
+            <img alt="company logo" src={logo} />
+            <Tabs value={0} className={classes.tabContainer}>
+              <Tab className={classes.tab} label="Home" />
+              <Tab className={classes.tab} label="Services" />
+              <Tab className={classes.tab} label="The Revolution" />
+              <Tab className={classes.tab} label="About Us" />
+              <Tab className={classes.tab} label="Contact Us" />
+
+            </Tabs>
+            <Button variant="contained" color="secondary" className={classes.button}>
+              Free Estimate
+            </Button>
           </Toolbar>
         </AppBar>
       </ElevationScroll>
       <div className={classes.toolbarMargin} />
-    </React.Fragment>
+    </React.Fragment >
 
   )
 }
