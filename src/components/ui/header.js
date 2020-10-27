@@ -1,8 +1,9 @@
-import React from 'react'
+import React, {useState} from 'react'
+
 import { AppBar, Button, Toolbar, useScrollTrigger, Tabs, Tab } from '@material-ui/core/'
 import { makeStyles } from '@material-ui/styles'
 import logo from '../../assets/logo.svg'
-
+import {Link} from "react-router-dom"
 
 function ElevationScroll(props) {
   const { children } = props;
@@ -45,21 +46,25 @@ const useStyles = makeStyles(theme => ({
 
 export default function Header(props) {
   const classes = useStyles()
+  const [value, setValue] = useState(0);
+  const handleChange = (e, value) => {
+    setValue(value)
+  }
   return (
     <React.Fragment>
       <ElevationScroll>
         <AppBar position="fixed">
           <Toolbar disableGutters>
             <img alt="company logo" src={logo} />
-            <Tabs value={0} className={classes.tabContainer}>
+            <Tabs value={value} className={classes.tabContainer} onChange={handleChange} indicatorColor="primary">
               <Tab className={classes.tab} label="Home" />
-              <Tab className={classes.tab} label="Services" />
+              <Tab className={classes.tab} label="Services"/>
               <Tab className={classes.tab} label="The Revolution" />
               <Tab className={classes.tab} label="About Us" />
               <Tab className={classes.tab} label="Contact Us" />
 
             </Tabs>
-            <Button variant="contained" color="secondary" className={classes.button}>
+            <Button variant="contained" color="secondary" className={classes.button} >
               Free Estimate
             </Button>
           </Toolbar>
