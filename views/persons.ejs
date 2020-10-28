@@ -1,0 +1,15 @@
+<html>
+  <body>
+    <ul>
+      <% persons.forEach(function(person) {%>
+        <li>
+          <%=person.firstName%>, <%=person.lastName%><br />
+          <a href='/editPerson/<%=person._id%>'>edit</a> 
+          <a href='/deletePerson/<%=person._id%>'>delete</a> <br />
+
+        </li>
+        <%})%>
+        <a href="/createPerson"><button>Create new Person</button></a>
+    </ul>
+  </body>
+</html>
