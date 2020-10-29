@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 
-import { AppBar, Button, Toolbar, useScrollTrigger, Tabs, Tab } from '@material-ui/core/'
+import { AppBar, Button, Toolbar, useScrollTrigger, Tabs, Tab, Menu, MenuItem } from '@material-ui/core/'
 import { makeStyles } from '@material-ui/styles'
 import logo from '../../assets/logo.svg'
 import { Link } from "react-router-dom"
+
 
 function ElevationScroll(props) {
   const { children } = props;
@@ -39,7 +40,7 @@ const useStyles = makeStyles(theme => ({
     minWidth: 10,
     marginLeft: "25px",
     '&:hover': {
-      color: "#000",
+      color: theme.palette.grey[900],
     }
   },
   tabLink: {
@@ -63,8 +64,23 @@ const useStyles = makeStyles(theme => ({
 export default function Header(props) {
   const classes = useStyles()
   const [value, setValue] = useState(0);
+  const [anchorEl, setAnchorEl] = useState(null)
+  const [open, setOpen] = useState(false)
+
+  
   const handleChange = (e, value) => {
     setValue(value)
+  }
+
+  const handleClick = (e)=>{
+    setAnchorEl(e.currentTarget)
+    setOpen(true)
+    
+  }
+
+  const handleClose = (e)=>{
+    setAnchorEl(null)
+    setOpen(false)
   }
 
 
@@ -99,7 +115,10 @@ export default function Header(props) {
             </Button>
             <Tabs value={value} className={classes.tabContainer} onChange={handleChange} indicatorColor="primary">
               <Tab className={classes.tab} to="/" component={Link} label="Home" />
-              <Tab className={classes.tab} label="Services" component={Link} to="/services" />
+              <Tab aria-controls= {anchorEl ? "simple-menu" : undefined}
+                  aria-haspopup={anchorEl ? "true" : undefined}
+                  onClick = {event=> handleClick(event)}
+                  className={classes.tab} label="Services" component={Link} to="/services" />
               <Tab className={classes.tab} label="The Revolution" component={Link} to="/revolution" />
               <Tab className={classes.tab} label="About Us" component={Link} to="/about" />
               <Tab className={classes.tab} label="Contact Us" component={Link} to="/contact" />
@@ -108,6 +127,11 @@ export default function Header(props) {
             <Button variant="contained" color="secondary" className={classes.button} >
               Free Estimate
             </Button>
+            <Menu id="simple-menu" anchorEl={anchorEl} open={open} onClose={handleClose}>
+              <MenuItem onClick={handleClose}>Custom Software Development</MenuItem>
+              <MenuItem onClick={handleClose}>Mobile App Development</MenuItem>
+              <MenuItem onClick={handleClose}>Website Development</MenuItem>
+            </Menu>
           </Toolbar>
         </AppBar>
       </ElevationScroll>
