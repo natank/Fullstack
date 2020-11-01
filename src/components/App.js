@@ -1,28 +1,49 @@
 import React from "react";
-import {ThemeProvider} from '@material-ui/styles';
-import {BrowserRouter, Route, Switch} from "react-router-dom";
+
 import {Button} from '@material-ui/core'
 import './PlainCssButton.css';
 
-import { StylesProvider } from '@material-ui/core/styles';
+import { StylesProvider, makeStyles } from '@material-ui/core/styles';
 
-  {/* Your component tree.
-  Now, you can override Material-UI's styles. */}
-  
-  
+
+
 const App = () => {
   return(
   <StylesProvider injectFirst>
-    <Btn />
-  </StylesProvider>)
-  }
+    <PlainCSSBtn />
+    <HookBtn/>
+  </StylesProvider>
+  )
+}
+
   
-const Btn = function(){
+
+const PlainCSSBtn = function(){
 
  return (
       <Button className="button" variant="contained" color="primary">
-      Hello World
+      Hello Plain
     </Button>
     )
+ }
+
+
+
+ const useStyles = makeStyles({
+  root: {
+    background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+    border: 0,
+    borderRadius: 3,
+    boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+    color: 'white',
+    height: 48,
+    padding: '0 30px'
+  }
+}
+)
+
+ function HookBtn(){
+   const classes = useStyles();
+   return <Button className={classes.root}>Hello Hook</Button>
  }
 export default App
