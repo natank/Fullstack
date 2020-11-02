@@ -2,51 +2,41 @@ import React from "react";
 
 import { Button } from '@material-ui/core'
 import './PlainCssButton.css';
+import './buttons.scss'
 
-import { StylesProvider, makeStyles } from '@material-ui/core/styles';
+// constants.js
+const paddingY = '7px';
+const paddingX = '10px';
+const baseFontSize = '1rem';
+const borderRadius = '5px';
 
+// buttons.js
+const button = `
+  .cssinjs-btn{
+    padding: ${paddingY} ${paddingX};
+    font-size: ${baseFontSize};
+    border-radius: ${borderRadius};
+    color: #fff;
+    background-color: green;
+  }
+`
 
 
 const App = () => {
+  JSSBtn();
   return (
-    <StylesProvider injectFirst>
-      <PlainCSSBtn />
-      <HookBtn />
-    </StylesProvider>
+    <div>
+      <button class="sass-btn">Sass button</button>
+      <button class="cssinjs-btn">CSSinJS Button</button>
+
+    </div>
   )
 }
 
 
-
-const PlainCSSBtn = function () {
-
-  return (
-    <Button className="button" variant="contained" color="primary">
-      Hello Plain
-    </Button>
-  )
+function JSSBtn() {
+  document.head.appendChild(document.createElement('style'))
+    .textContent = button
 }
 
-
-
-const useStyles = makeStyles({
-  root: {
-    background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
-    border: 0,
-    borderRadius: 3,
-    boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
-    color: 'white',
-    height: 48,
-    padding: '0 30px',
-    '&:hover': {
-      background: 'red'
-    }
-  }
-}
-)
-
-function HookBtn() {
-  const classes = useStyles();
-  return <Button className={classes.root}>Hello Hook</Button>
-}
 export default App

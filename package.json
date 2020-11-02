@@ -33,6 +33,7 @@
     "@material-ui/styles": "^4.10.0",
     "axios": "^0.19.2",
     "css-loader": "^3.6.0",
+    "jss": "^10.4.0",
     "lodash": "^4.17.19",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
