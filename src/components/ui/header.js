@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react'
 
 import {
   AppBar, Button, Toolbar, useScrollTrigger,
-  useMediaQuery, Tabs, Tab, Menu, MenuItem, SwipeableDrawer
+  useMediaQuery, Tabs, Tab, Menu, MenuItem,
+  SwipeableDrawer, IconButton, List, ListItem,
+  ListItemText
 } from '@material-ui/core/'
 
-import { MenuIcon } from '@material-ui/icons'
+import MenuIcon from '@material-ui/icons/Menu';
 
 import { makeStyles, useTheme } from '@material-ui/styles'
 import logo from '../../assets/logo.svg'
@@ -91,8 +93,18 @@ const useStyles = makeStyles(theme => ({
       backgroundColor: theme.palette.primary.dark
     }
   },
+  drawerIcon: {
+    height: "50px",
+    width: "50px"
+  },
   menuItemSelected: {
     color: theme.palette.common.black
+  },
+  drawerIconContainer: {
+    marginLeft: "auto",
+    "&:hover": {
+      backgroundColor: "transparent"
+    }
   }
 }))
 
@@ -236,13 +248,34 @@ export default function Header(props) {
   const drawer = (
     <React.Fragment>
       <SwipeableDrawer
-        anchor={anchor}
-        open={state[anchor]}
+        open={openDrawer}
         onClose={() => setOpenDrawer(false)}
-        onOpen={toggleDrawer(anchor, true)}
+        onOpen={() => setOpenDrawer(true)}
       >
-
+        <List disablePadding>
+          <ListItem divider onClick={() => setOpenDrawer(false)} button component={Link} to="/">
+            <ListItemText disableTypography>Home</ListItemText>
+          </ListItem>
+          <ListItem divider onClick={() => setOpenDrawer(false)} button component={Link} to="/services">
+            <ListItemText disableTypography>Services</ListItemText>
+          </ListItem>
+          <ListItem divider onClick={() => setOpenDrawer(false)} button component={Link} to="/revolution">
+            <ListItemText disableTypography>Revolution</ListItemText>
+          </ListItem>
+          <ListItem divider onClick={() => setOpenDrawer(false)} button component={Link} to="/about">
+            <ListItemText disableTypography>About Us</ListItemText>
+          </ListItem>
+          <ListItem divider onClick={() => setOpenDrawer(false)} button component={Link} to="/contact">
+            <ListItemText disableTypography>Contact Us</ListItemText>
+          </ListItem>
+          <ListItem divider onClick={() => setOpenDrawer(false)} button component={Link} to="/estimate">
+            <ListItemText disableTypography>Free Estimate</ListItemText>
+          </ListItem>
+        </List>
       </SwipeableDrawer>
+      <IconButton className={classes.drawerIconContainer} onClick={() => setOpenDrawer(!openDrawer)} disableRipple>
+        <MenuIcon className={classes.drawerIcon} />
+      </IconButton>
     </React.Fragment >
   )
 
@@ -257,7 +290,7 @@ export default function Header(props) {
               onClick={() => setValue(0)}>
               <img alt="company logo" className={classes.logo} src={logo} />
             </Button>
-            {matches ? null : tabs}
+            {matches ? drawer : tabs}
           </Toolbar>
         </AppBar>
       </ElevationScroll>
