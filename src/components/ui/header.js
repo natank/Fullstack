@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { Link } from "react-router-dom"
 
 import {
   AppBar, Button, Toolbar, useScrollTrigger,
@@ -11,20 +12,11 @@ import MenuIcon from '@material-ui/icons/Menu';
 
 import { makeStyles, useTheme } from '@material-ui/styles'
 import logo from '../../assets/logo.svg'
-import { Link } from "react-router-dom"
+import config from "./headerConfig"
 
-function ElevationScroll(props) {
-  const { children } = props;
+const {navItems, menuOptions} = config;
 
-  const trigger = useScrollTrigger({
-    disableHysteresis: true,
-    threshold: 0,
-  });
 
-  return React.cloneElement(children, {
-    elevation: trigger ? 4 : 0,
-  });
-}
 
 const useStyles = makeStyles(theme => ({
   toolbarMargin: {
@@ -119,35 +111,8 @@ export default function Header(props) {
   const [selectedIndex, setSelectedIndex] = useState(0)
   const [openDrawer, setOpenDrawer] = useState(false)
 
-  const handleChange = (e, newValue) => {
-    setValue(newValue)
-  }
-
-  const handleClick = (e) => {
-    setAnchorEl(e.currentTarget)
-    setOpenMenu(true)
-
-  }
-
-  const handleMenuItemClick = (e, i) => {
-    setAnchorEl(null);
-    setOpenMenu(false)
-    setSelectedIndex(i)
-  }
-  const handleClose = (e) => {
-    setAnchorEl(null)
-    setOpenMenu(false)
-  }
-
-  const menuOptions = [
-    { name: "Services", link: "/services" },
-    { name: "Custom Software Development", link: "/customsoftware" },
-    { name: "Mobile App Development", link: "/mobileapps" },
-    { name: "Website Development", link: "/websites" }
-  ]
-
-
-
+  
+  
   useEffect(() => {
     switch (window.location.pathname) {
       case "/":
@@ -203,49 +168,76 @@ export default function Header(props) {
         break
     }
   }, [value])
-  const tabs = (
+  
+  return (
     <React.Fragment>
-      <Tabs value={value} className={classes.tabContainer} onChange={handleChange} indicatorColor="primary">
-        <Tab className={classes.tab} to="/" component={Link} label="Home" />
-        <Tab aria-owns={anchorEl ? "simple-menu" : undefined}
-          aria-haspopup={anchorEl ? "true" : undefined}
-          onMouseOver={event => handleClick(event)}
-          className={classes.tab} label="Services" component={Link} to="/services" />
-        <Tab className={classes.tab} label="The Revolution" component={Link} to="/revolution" />
-        <Tab className={classes.tab} label="About Us" component={Link} to="/about" />
-        <Tab className={classes.tab} label="Contact Us" component={Link} to="/contact" />
-
-      </Tabs>
-      <Button variant="contained" color="secondary" className={classes.button} >
-        Free Estimate
+      <ElevationScroll>
+        <AppBar position="fixed">
+          <Toolbar disableGutters>
+            <Button component={Link}
+              to="/" className={classes.logoContainer}
+              disableRipple
+              onClick={() => setValue(0)}>
+              <img alt="company logo" className={classes.logo} src={logo} />
             </Button>
-      <Menu id="simple-menu" anchorEl={anchorEl}
-        open={openMenu}
-        onClose={handleClose}
-        classes={{ paper: classes.menu }}
-        MenuListProps={{ onMouseLeave: handleClose }}
-        elevation={2}
-      >
-        {menuOptions.map((option, i) => (
-          <MenuItem component={Link}
-            key={option.name}
-            to={option.link}
-            classes={{ root: classes.menuItem, selected: classes.menuItemSelected }}
-            onClick={(event) => {
-              handleMenuItemClick(event, i)
-              setValue(1);
-              handleClose()
-            }}
-            selected={i === selectedIndex && value === 1}
-          >
-            {option.name}
-          </MenuItem>
-        ))}
-      </Menu>
-    </React.Fragment>
+            {matches ? drawer() : tabs()}
+          </Toolbar>
+        </AppBar>
+      </ElevationScroll>
+      <div className={classes.toolbarMargin} />
+    </React.Fragment >
+
   )
 
-  const drawer = (
+  /* Event Handlers*/
+
+  function handleChange(e, newValue) {
+    setValue(newValue)
+  }
+
+  function handleClick(e){
+    setAnchorEl(e.currentTarget)
+    setOpenMenu(true)
+  }
+
+  function handleMenuItemClick(e, i){
+    setAnchorEl(null);
+    setOpenMenu(false)
+    setSelectedIndex(i)
+  }
+  function handleClose(e){
+    setAnchorEl(null)
+    setOpenMenu(false)
+  }
+
+
+  function ElevationScroll(props) {
+    const { children } = props;
+  
+    const trigger = useScrollTrigger({
+      disableHysteresis: true,
+      threshold: 0,
+    });
+  
+    return React.cloneElement(children, {
+      elevation: trigger ? 4 : 0,
+    });
+  }
+
+
+
+  /**drawing functions */
+  function tabs(){
+    return <React.Fragment>   
+      {renderTabs()}
+      <Button variant="contained" color="secondary" className={classes.button} >
+        Free Estimate
+      </Button>
+      {renderMenu()}
+    </React.Fragment>
+  }
+
+  function drawer(){
     <React.Fragment>
       <SwipeableDrawer
         open={openDrawer}
@@ -277,25 +269,41 @@ export default function Header(props) {
         <MenuIcon className={classes.drawerIcon} />
       </IconButton>
     </React.Fragment >
-  )
+  }
 
-  return (
-    <React.Fragment>
-      <ElevationScroll>
-        <AppBar position="fixed">
-          <Toolbar disableGutters>
-            <Button component={Link}
-              to="/" className={classes.logoContainer}
-              disableRipple
-              onClick={() => setValue(0)}>
-              <img alt="company logo" className={classes.logo} src={logo} />
-            </Button>
-            {matches ? drawer : tabs}
-          </Toolbar>
-        </AppBar>
-      </ElevationScroll>
-      <div className={classes.toolbarMargin} />
-    </React.Fragment >
+  function renderTabs(){
+    return <Tabs value={value} className={classes.tabContainer} onChange={handleChange} indicatorColor="primary">
+      {
+        navItems.map((item, index)=>{
+          return <Tab className={classes.tab} to={`/${item.to}`} component={Link} label={`${item.label}`} key={index}/>
+        })
+      }
+    </Tabs>
+  }
 
-  )
+  function renderMenu(){
+    return <Menu id="simple-menu" anchorEl={anchorEl}
+    open={openMenu}
+    onClose={handleClose}
+    classes={{ paper: classes.menu }}
+    MenuListProps={{ onMouseLeave: handleClose }}
+    elevation={2}
+  >
+    {menuOptions.map((option, i) => (
+      <MenuItem component={Link}
+        key={option.name}
+        to={option.link}
+        classes={{ root: classes.menuItem, selected: classes.menuItemSelected }}
+        onClick={(event) => {
+          handleMenuItemClick(event, i)
+          setValue(1);
+          handleClose()
+        }}
+        selected={i === selectedIndex && value === 1}
+      >
+        {option.name}
+      </MenuItem>
+    ))}
+  </Menu>
+  }
 }
