@@ -81,7 +81,16 @@ export const useStyles = makeStyles(theme => ({
     }
   },
   drawer: {
-    backgroundColor: theme.palette.common.blue
+    backgroundColor: theme.palette.common.blue,
+  },
+  drawerItem:{
+    ...theme.typography.tab,
+    color: theme.palette.common.white,
+    
+  },
+  drawerItemEstimate: {
+    ...theme.typography.tab,
+    backgroundColor:theme.palette.common.orange
   }
 }))
 

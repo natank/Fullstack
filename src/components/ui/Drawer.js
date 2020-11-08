@@ -25,12 +25,12 @@ export default function Drawer() {
               onClick={() => setOpenDrawer(false)}
               component={Link}
               to={`/${item.to}`}>
-              <ListItemText disableTypography>{item.mobileLabel || item.label}</ListItemText>
+              <ListItemText classes={{root: classes.drawerItem}} disableTypography>{item.mobileLabel || item.label}</ListItemText>
             </ListItem>
           })
         }
-        <ListItem divider onClick={() => setOpenDrawer(false)} button component={Link} to="/estimate">
-          <ListItemText disableTypography>Free Estimate</ListItemText>
+        <ListItem className={classes.drawerItemEstimate} divider onClick={() => setOpenDrawer(false)} button component={Link} to="/estimate">
+          <ListItemText className = {classes.drawerItem} disableTypography>Free Estimate</ListItemText>
         </ListItem>
       </List>
     </SwipeableDrawer>
