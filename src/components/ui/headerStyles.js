@@ -86,7 +86,10 @@ export const useStyles = makeStyles(theme => ({
   drawerItem:{
     ...theme.typography.tab,
     color: theme.palette.common.white,
-    
+    opacity: 0.7,
+  },
+  drawerItemSelected:{
+      opacity: 1
   },
   drawerItemEstimate: {
     ...theme.typography.tab,

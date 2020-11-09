@@ -38,7 +38,7 @@ export default function Header(props) {
               <img alt="company logo" className={classes.logo} src={logo} />
             </Button>
 
-            {matches ? <Drawer /> : <HeaderTabs {...{ value, setValue, selectedIndex, setSelectedIndex }} />}
+            {matches ? <Drawer {...{value, setValue}}/> : <HeaderTabs {...{ value, setValue, selectedIndex, setSelectedIndex }} />}
           </Toolbar>
         </AppBar>
       </ElevationScroll>
