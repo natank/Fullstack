@@ -42,6 +42,7 @@ export default function HeaderTabs(props) {
       classes={{ paper: classes.menu }}
       MenuListProps={{ onMouseLeave: handleClose }}
       elevation={2}
+      style={{zIndex: 1302}}
     >
       {menuOptions.map((option, i) => (
         <MenuItem component={Link}

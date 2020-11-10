@@ -89,11 +89,16 @@ export const useStyles = makeStyles(theme => ({
     opacity: 0.7,
   },
   drawerItemSelected:{
+    "& .MuiListItemText-root":{
       opacity: 1
+    }
   },
   drawerItemEstimate: {
     ...theme.typography.tab,
     backgroundColor:theme.palette.common.orange
+  },
+  appbar: {
+    zIndex: theme.zIndex.modal+1
   }
 }))
 

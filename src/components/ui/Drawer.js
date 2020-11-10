@@ -22,6 +22,7 @@ export default function Drawer(props) {
       onOpen={() => setOpenDrawer(true)}
       classes={{ paper: classes.drawer }}
     >
+      <div className= {classes.toolbarMargin} />
       <List disablePadding>
         {
           navItems.map((item, index) => {
@@ -31,9 +32,10 @@ export default function Drawer(props) {
               component={Link}
               to={`/${item.to}`}
               selected = {value === index}
+              classes = {{selected: classes.drawerItemSelected}}
               >
               <ListItemText 
-                className={value===index ? [classes.drawerItem, classes.drawerItemSelected] : classes.drawerItem} 
+                className={classes.drawerItem} 
                 disableTypography
               >
                   {item.mobileLabel || item.label}
@@ -42,14 +44,14 @@ export default function Drawer(props) {
           })
         }
         <ListItem 
-          className={classes.drawerItemEstimate} 
+          classes = {{root: classes.drawerItemEstimate, selected: classes.drawerItemSelected}}
           divider 
           onClick={() => setOpenDrawer(false)} 
           button 
           component={Link} 
           to="/estimate">
           <ListItemText 
-            className={value===6 ? [classes.drawerItem, classes.drawerItemSelected] : classes.drawerItem} 
+            className={classes.drawerItem}
             disableTypography
           >
             Free Estimate</ListItemText>

@@ -29,7 +29,7 @@ export default function Header(props) {
   return (
     <React.Fragment>
       <ElevationScroll>
-        <AppBar position="fixed">
+        <AppBar position="fixed" className = {classes.appbar}>
           <Toolbar disableGutters>
             <Button component={Link}
               to="/" className={classes.logoContainer}
