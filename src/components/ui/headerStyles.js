@@ -46,7 +46,7 @@ export const useStyles = makeStyles(theme => ({
 
   },
   button: {
-    ...theme.Typography.estimate,
+    ...theme.typography.estimate,
     borderRadius: "50px",
     marginLeft: "50px",
     marginRight: "25px",
@@ -83,22 +83,22 @@ export const useStyles = makeStyles(theme => ({
   drawer: {
     backgroundColor: theme.palette.common.blue,
   },
-  drawerItem:{
+  drawerItem: {
     ...theme.typography.tab,
     color: theme.palette.common.white,
     opacity: 0.7,
   },
-  drawerItemSelected:{
-    "& .MuiListItemText-root":{
+  drawerItemSelected: {
+    "& .MuiListItemText-root": {
       opacity: 1
     }
   },
   drawerItemEstimate: {
     ...theme.typography.tab,
-    backgroundColor:theme.palette.common.orange
+    backgroundColor: theme.palette.common.orange
   },
   appbar: {
-    zIndex: theme.zIndex.modal+1
+    zIndex: theme.zIndex.modal + 1
   }
 }))
 

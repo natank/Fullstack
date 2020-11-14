@@ -1,6 +1,6 @@
-import {makeStyles} from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 
-export const useStyles = makeStyles(theme=>{
+export const useStyles = makeStyles(theme => {
     return {
         footer: {
             backgroundColor: theme.palette.common.blue,
@@ -11,25 +11,46 @@ export const useStyles = makeStyles(theme=>{
         adornment: {
             width: "25em",
             verticalAlign: "bottom",
-            [theme.breakpoints.down("md")]:{
+            [theme.breakpoints.down("md")]: {
                 width: "21em"
             },
             [theme.breakpoints.down("xs")]: {
                 width: "15em"
             }
         },
-        mainContainer:{
+        mainContainer: {
             position: "absolute"
         },
-        link:{
+        link: {
             color: "white",
             fontFamily: "Arial",
             fontSize: "0.75rem",
-            fontWeight: "bold"
+            fontWeight: "bold",
+            "&:hover": {
+                backgroundColor: theme.palette.primary.light,
+                color: theme.palette.common.white
+            }
         },
-        gridItem:{
+        gridItem: {
             margin: "3em"
+        },
+        icon: {
+            height: "4em",
+            widtht: "4em",
+            [theme.breakpoints.down("xs")]: {
+                height: "2.5em",
+                width: "2.5em"
+            }
+        },
+        socialContainer: {
+            position: "absolute",
+            marginTop: "-6em",
+            right: "1.5em",
+            [theme.breakpoints.down("xs")]: {
+                right: "0.6em"
+            }
+
         }
     }
-    
+
 })

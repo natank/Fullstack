@@ -18,8 +18,7 @@ export default function Header(props) {
   const classes = useStyles()
   const theme = useTheme();
   const matches = useMediaQuery(theme.breakpoints.down("md"))
-  const [value, setValue] = useState(0);
-  const [selectedIndex, setSelectedIndex] = useState(0)
+  const { value, setValue, selectedIndex, setSelectedIndex } = props.props;
 
   useEffect(
     () => pathNameToTab(value, setValue, setSelectedIndex),
@@ -29,7 +28,7 @@ export default function Header(props) {
   return (
     <React.Fragment>
       <ElevationScroll>
-        <AppBar position="fixed" className = {classes.appbar}>
+        <AppBar position="fixed" className={classes.appbar}>
           <Toolbar disableGutters>
             <Button component={Link}
               to="/" className={classes.logoContainer}
@@ -38,7 +37,7 @@ export default function Header(props) {
               <img alt="company logo" className={classes.logo} src={logo} />
             </Button>
 
-            {matches ? <Drawer {...{value, setValue}}/> : <HeaderTabs {...{ value, setValue, selectedIndex, setSelectedIndex }} />}
+            {matches ? <Drawer {...{ value, setValue }} /> : <HeaderTabs {...{ value, setValue, selectedIndex, setSelectedIndex }} />}
           </Toolbar>
         </AppBar>
       </ElevationScroll>
