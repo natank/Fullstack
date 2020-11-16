@@ -30,18 +30,15 @@ export default function Footer(props) {
                             <Grid item component={Link}
                                 onClick={() => { setValue(1); setSelectedIndex(1) }}
                                 to="/services" className={classes.link}>
-                                Custom
-                         Software Development</Grid>
+                                Custom Software Development</Grid>
                             <Grid item component={Link}
                                 onClick={() => { setValue(1); setSelectedIndex(2) }}
                                 to="/services" className={classes.link}>
-                                Mobile
-                         App Development</Grid>
+                                iOS/Android App Development</Grid>
                             <Grid item component={Link}
                                 onClick={() => { setValue(1); setSelectedIndex(3) }}
                                 to="/services" className={classes.link}>
-                                Website
-                         Development</Grid>
+                                Website Development</Grid>
                         </Grid>
                     </Grid>
                     <Grid item className={classes.gridItem}>

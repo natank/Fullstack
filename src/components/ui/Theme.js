@@ -57,10 +57,10 @@ export default createMuiTheme({
         },
         learnButton: {
             borderColor: arcBlue,
-            color: `$`,
+            color: arcBlue,
             borderWidth: 2,
             textTransform: "none",
-            borderRadius: 50,
+            borderRadius: 25,
             fontFamily: "Roboto",
             fontWeight: "bold",
         }
