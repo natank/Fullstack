@@ -13,7 +13,14 @@ export default function HeaderTabs(props) {
 
   return <React.Fragment>
     {renderTabs()}
-    <Button variant="contained" color="secondary" className={classes.button} >
+    <Button 
+      component={Link}  
+      to="/estimate" 
+      variant="contained" 
+      color="secondary" 
+      className={classes.button} 
+      onClick={()=>props.setValue(5)}
+    >
       Free Estimate
     </Button>
     {renderMenu()}

@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { ThemeProvider } from '@material-ui/styles';
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import Header from './ui/Header'
-import Footer from '../components/ui/Footer'
+import Footer from './ui/Footer'
 import theme from './ui/Theme'
+import Services from './Services'
 
 import LandingPage from '../components/LandingPage'
 const App = () => {
@@ -15,8 +16,18 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <Header props={props} />
         <Switch>
-          <Route exact path="/" component={LandingPage} />
-          <Route exact path="/services" component={() => <div>Services</div>} />
+          <Route exact path="/" render={(props)=>
+            <LandingPage 
+              {...props}
+              setValue={setValue} 
+              setSelectedIndex={setSelectedIndex}/>
+            }/>
+          <Route exact path="/services" render={(props)=>
+            <Services 
+              {...props}
+              setValue={setValue} 
+              setSelectedIndex={setSelectedIndex}/>} 
+          />
           <Route exact path="/customsoftware" component={() => <div>Custom Software</div>} />
           <Route exact path="/mobileapps" component={() => <div>Mobile Apps</div>} />
           <Route exact path="/websites" component={() => <div>Websites</div>} />
