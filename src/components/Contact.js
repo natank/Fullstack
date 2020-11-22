@@ -2,13 +2,22 @@ import React, { useState } from 'react'
 
 import { Link } from 'react-router-dom'
 import { makeStyles, useTheme } from '@material-ui/core/styles'
-import { useMediaQuery, Grid, Typography, Button, TextField } from '@material-ui/core'
+import { 
+  useMediaQuery, 
+  Grid, 
+  Typography, 
+  Button, 
+  TextField,
+  Dialog, 
+  DialogContent 
+} from '@material-ui/core'
 import background from '../assets/background.jpg'
 import mobileBackground from '../assets/mobileBackground.jpg'
 import phoneIcon from '../assets/phone.svg'
 import emailIcon from '../assets/email.svg'
 import airplane from '../assets/send.svg'
 import ButtonArrow from './ui/ButtonArrow'
+
 
 
 
@@ -66,6 +75,10 @@ const useStyles = makeStyles(theme => ({
     "&:hover": {
       backgroundColor: theme.palette.secondary.light
     }
+  },
+  [theme.breakpoints.down("sm")]: {
+    height: 40,
+    width: 225
   }
 
 }))
@@ -79,6 +92,7 @@ export default function Contact(props) {
   const theme = useTheme()
   const matchesSM = useMediaQuery(theme.breakpoints.down("sm"));
   const matchesMD = useMediaQuery(theme.breakpoints.down("md"));
+  const matchesXS = useMediaQuery(theme.breakpoints.down("xs"));
 
   const [name, setName] = useState('')
 
@@ -87,7 +101,7 @@ export default function Contact(props) {
   const [phone, setPhone] = useState('')
   const [phoneHelper, setPhoneHelper] = useState("")
   const [message, setMessage] = useState('')
-
+  const [open, setOpen] = useState(false)
   const onChange = event => {
     let valid;
 
@@ -206,21 +220,97 @@ export default function Contact(props) {
             </Grid>
             <Grid item container justify="center" style={{ marginTop: "2em" }}>
               <Button
-                disabled={name.length === 0 || message.length === 0 || phoneHelper.length !== 0 || emailHelper.length !== 0}
+                // disabled={name.length === 0 || message.length === 0 || phoneHelper.length !== 0 || emailHelper.length !== 0}
                 variant="contained"
-                className={classes.sendButton}>
+                className={classes.sendButton}
+                onClick = {()=>setOpen(true)}
+                >
                 Send Message <img src={airplane} alt="paper airplane" style={{ marginLeft: "1em" }} />
               </Button>
             </Grid>
-
           </Grid>
         </Grid>
       </Grid>
+      <Dialog 
+        style={{zIndex: 1302 }}
+        open={open} onChange={()=>setOpen(false)} 
+        fullScreen={matchesXS}
+        PaperProps={{style: {
+          padding:matchesXS ? "1em 0em" : matchesSM ? "5em 5em": matchesMD ? "5em 10em": "5em 20em",
+          boxSizing: "content-box"
+          }}}>
+        <DialogContent>
+          <Grid container direction="column">
+            <Grid item>
+              <Typography variant="h4" gutterBottom align="center">Confirm message</Typography>
+            </Grid>
+            
+            
+            <Grid item style={{ marginBottom: "0.5em" }}>
+              <TextField
+                label="Name"
+                fullWidth
+                id="name"
+                value={name}
+                onChange={(event) => setName(event.target.value)} />
+            </Grid>
+            <Grid item style={{ marginBottom: "0.5em" }}>
+              <TextField
+                label="Email"
+                error={emailHelper.length !== 0}
+                helperText={emailHelper}
+                id="email"
+                fullWidth
+                value={email}
+                onChange={onChange} />
+            </Grid>
+            <Grid item style={{ marginBottom: "0.5em" }}>
+              <TextField
+                label="Phone"
+                error={phoneHelper.length !== 0}
+                helperText={phoneHelper}
+                id="phone"
+                fullWidth
+                value={phone}
+                onChange={onChange} />
+            </Grid>
 
-
-
-
-
+            
+            
+            
+            <Grid item style={{ maxWidth: matchesXS ? "100%": "20em" }}>
+              <TextField
+                InputProps={{ disableUnderline: true }}
+                fullWidth
+                value={message}
+                id="message"
+                multiline
+                rows={10}
+                className={classes.message}
+                onChange={event => setMessage(event.target.value)} />
+            </Grid>       
+            <Grid 
+              item 
+              container 
+              direction={matchesSM ? "column": "row"}
+              style={{marginTop: "2em"}} 
+              alignItems="center">
+              <Grid item>
+                <Button color="primary" onClick={()=>setOpen(false)}>Cancel</Button>  
+              </Grid>
+              <Grid item>
+                <Button style={{fontWeight: 300}}
+                  variant="contained"
+                  className={classes.sendButton}
+                  onClick = {()=>setOpen(true)}
+                  >
+                  Send Message <img src={airplane} alt="paper airplane" style={{ marginLeft: "1em" }} />
+                </Button>
+              </Grid>
+            </Grid>     
+          </Grid>
+        </DialogContent>
+      </Dialog>
 
       <Grid item container
         direction={matchesMD ? "column" : "row"}
